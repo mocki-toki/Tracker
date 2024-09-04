@@ -3,42 +3,47 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 74;
+	objectVersion = 56;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C13CFD6A2C8E40F500E7800F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13CFD692C8E40F500E7800F /* AppDelegate.swift */; };
+		C13CFD6C2C8E40F500E7800F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13CFD6B2C8E40F500E7800F /* SceneDelegate.swift */; };
+		C13E04C12C941ECF00B79C7C /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04B52C941ECF00B79C7C /* Tracker.swift */; };
+		C13E04C22C941ECF00B79C7C /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04B62C941ECF00B79C7C /* TrackerCategory.swift */; };
+		C13E04C32C941ECF00B79C7C /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04B72C941ECF00B79C7C /* TrackerRecord.swift */; };
+		C13E04C42C941ECF00B79C7C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04B92C941ECF00B79C7C /* MainViewController.swift */; };
+		C13E04C52C941ECF00B79C7C /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BA2C941ECF00B79C7C /* NewTrackerViewController.swift */; };
+		C13E04C62C941ECF00B79C7C /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BB2C941ECF00B79C7C /* ScheduleViewController.swift */; };
+		C13E04C72C941ECF00B79C7C /* TrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BC2C941ECF00B79C7C /* TrackerCell.swift */; };
+		C13E04C82C941ECF00B79C7C /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BD2C941ECF00B79C7C /* TrackersViewController.swift */; };
+		C13E04C92C941ECF00B79C7C /* TrackerTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BE2C941ECF00B79C7C /* TrackerTypeSelectionViewController.swift */; };
+		C13E04CA2C941ECF00B79C7C /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BF2C941ECF00B79C7C /* Weekday.swift */; };
+		C13E04CF2C941F0100B79C7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C13E04CC2C941F0100B79C7C /* LaunchScreen.storyboard */; };
+		C13E04D02C941F0100B79C7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C13E04CE2C941F0100B79C7C /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		C1CA0C302C5CFADC006EA49F /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C13CFD662C8E40F500E7800F /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C13CFD692C8E40F500E7800F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C13CFD6B2C8E40F500E7800F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		C13CFD772C8E40F700E7800F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C13E04B52C941ECF00B79C7C /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
+		C13E04B62C941ECF00B79C7C /* TrackerCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
+		C13E04B72C941ECF00B79C7C /* TrackerRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
+		C13E04B92C941ECF00B79C7C /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		C13E04BA2C941ECF00B79C7C /* NewTrackerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
+		C13E04BB2C941ECF00B79C7C /* ScheduleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
+		C13E04BC2C941ECF00B79C7C /* TrackerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerCell.swift; sourceTree = "<group>"; };
+		C13E04BD2C941ECF00B79C7C /* TrackersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
+		C13E04BE2C941ECF00B79C7C /* TrackerTypeSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerTypeSelectionViewController.swift; sourceTree = "<group>"; };
+		C13E04BF2C941ECF00B79C7C /* Weekday.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
+		C13E04CB2C941F0100B79C7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C13E04CE2C941F0100B79C7C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		C1CA0C422C5CFADF006EA49F /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				/Localized/LaunchScreen.storyboard,
-				/Localized/Main.storyboard,
-				Info.plist,
-			);
-			target = C1CA0C2F2C5CFADC006EA49F /* Tracker */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		C1CA0C462C5CFADF006EA49F /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = C1CA0C2E2C5CFADC006EA49F /* Resources */;
-			membershipExceptions = (
-				Base.lproj/LaunchScreen.storyboard,
-				Base.lproj/Main.storyboard,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		C1CA0C322C5CFADC006EA49F /* Tracker */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C1CA0C422C5CFADF006EA49F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, C1CA0C462C5CFADF006EA49F /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Tracker; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
-		C1CA0C2D2C5CFADC006EA49F /* Frameworks */ = {
+		C13CFD632C8E40F500E7800F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -48,158 +53,160 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C1CA0C272C5CFADC006EA49F = {
+		C13CFD5D2C8E40F500E7800F = {
 			isa = PBXGroup;
 			children = (
-				C1CA0C322C5CFADC006EA49F /* Tracker */,
-				C1CA0C312C5CFADC006EA49F /* Products */,
+				C13CFD682C8E40F500E7800F /* Tracker */,
+				C13CFD672C8E40F500E7800F /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		C1CA0C312C5CFADC006EA49F /* Products */ = {
+		C13CFD672C8E40F500E7800F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C1CA0C302C5CFADC006EA49F /* Tracker.app */,
+				C13CFD662C8E40F500E7800F /* Tracker.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		C13CFD682C8E40F500E7800F /* Tracker */ = {
+			isa = PBXGroup;
+			children = (
+				C13E04CC2C941F0100B79C7C /* LaunchScreen.storyboard */,
+				C13E04CE2C941F0100B79C7C /* Assets.xcassets */,
+				C13E04C02C941ECF00B79C7C /* Presentation */,
+				C13CFD692C8E40F500E7800F /* AppDelegate.swift */,
+				C13CFD6B2C8E40F500E7800F /* SceneDelegate.swift */,
+				C13CFD772C8E40F700E7800F /* Info.plist */,
+			);
+			path = Tracker;
+			sourceTree = "<group>";
+		};
+		C13E04B82C941ECF00B79C7C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C13E04B52C941ECF00B79C7C /* Tracker.swift */,
+				C13E04B62C941ECF00B79C7C /* TrackerCategory.swift */,
+				C13E04B72C941ECF00B79C7C /* TrackerRecord.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C13E04C02C941ECF00B79C7C /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				C13E04B82C941ECF00B79C7C /* Models */,
+				C13E04B92C941ECF00B79C7C /* MainViewController.swift */,
+				C13E04BA2C941ECF00B79C7C /* NewTrackerViewController.swift */,
+				C13E04BB2C941ECF00B79C7C /* ScheduleViewController.swift */,
+				C13E04BC2C941ECF00B79C7C /* TrackerCell.swift */,
+				C13E04BD2C941ECF00B79C7C /* TrackersViewController.swift */,
+				C13E04BE2C941ECF00B79C7C /* TrackerTypeSelectionViewController.swift */,
+				C13E04BF2C941ECF00B79C7C /* Weekday.swift */,
+			);
+			path = Presentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C1CA0C2F2C5CFADC006EA49F /* Tracker */ = {
+		C13CFD652C8E40F500E7800F /* Tracker */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C1CA0C432C5CFADF006EA49F /* Build configuration list for PBXNativeTarget "Tracker" */;
+			buildConfigurationList = C13CFD7A2C8E40F700E7800F /* Build configuration list for PBXNativeTarget "Tracker" */;
 			buildPhases = (
-				C1CA0C2C2C5CFADC006EA49F /* Sources */,
-				C1CA0C2D2C5CFADC006EA49F /* Frameworks */,
-				C1CA0C2E2C5CFADC006EA49F /* Resources */,
+				C13CFD622C8E40F500E7800F /* Sources */,
+				C13CFD632C8E40F500E7800F /* Frameworks */,
+				C13CFD642C8E40F500E7800F /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				C1CA0C322C5CFADC006EA49F /* Tracker */,
-			);
 			name = Tracker;
-			packageProductDependencies = (
-			);
 			productName = Tracker;
-			productReference = C1CA0C302C5CFADC006EA49F /* Tracker.app */;
+			productReference = C13CFD662C8E40F500E7800F /* Tracker.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		C1CA0C282C5CFADC006EA49F /* Project object */ = {
+		C13CFD5E2C8E40F500E7800F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
-					C1CA0C2F2C5CFADC006EA49F = {
-						CreatedOnToolsVersion = 16.0;
+					C13CFD652C8E40F500E7800F = {
+						CreatedOnToolsVersion = 15.4;
 					};
 				};
 			};
-			buildConfigurationList = C1CA0C2B2C5CFADC006EA49F /* Build configuration list for PBXProject "Tracker" */;
+			buildConfigurationList = C13CFD612C8E40F500E7800F /* Build configuration list for PBXProject "Tracker" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = C1CA0C272C5CFADC006EA49F;
-			preferredProjectObjectVersion = 60;
-			productRefGroup = C1CA0C312C5CFADC006EA49F /* Products */;
+			mainGroup = C13CFD5D2C8E40F500E7800F;
+			productRefGroup = C13CFD672C8E40F500E7800F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C1CA0C2F2C5CFADC006EA49F /* Tracker */,
+				C13CFD652C8E40F500E7800F /* Tracker */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		C1CA0C2E2C5CFADC006EA49F /* Resources */ = {
+		C13CFD642C8E40F500E7800F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C13E04D02C941F0100B79C7C /* Assets.xcassets in Resources */,
+				C13E04CF2C941F0100B79C7C /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		C1CA0C2C2C5CFADC006EA49F /* Sources */ = {
+		C13CFD622C8E40F500E7800F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C13E04C32C941ECF00B79C7C /* TrackerRecord.swift in Sources */,
+				C13E04C72C941ECF00B79C7C /* TrackerCell.swift in Sources */,
+				C13E04CA2C941ECF00B79C7C /* Weekday.swift in Sources */,
+				C13E04C12C941ECF00B79C7C /* Tracker.swift in Sources */,
+				C13E04C52C941ECF00B79C7C /* NewTrackerViewController.swift in Sources */,
+				C13E04C62C941ECF00B79C7C /* ScheduleViewController.swift in Sources */,
+				C13CFD6A2C8E40F500E7800F /* AppDelegate.swift in Sources */,
+				C13E04C42C941ECF00B79C7C /* MainViewController.swift in Sources */,
+				C13E04C82C941ECF00B79C7C /* TrackersViewController.swift in Sources */,
+				C13E04C22C941ECF00B79C7C /* TrackerCategory.swift in Sources */,
+				C13CFD6C2C8E40F500E7800F /* SceneDelegate.swift in Sources */,
+				C13E04C92C941ECF00B79C7C /* TrackerTypeSelectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		C13E04CC2C941F0100B79C7C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C13E04CB2C941F0100B79C7C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
-		C1CA0C442C5CFADF006EA49F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Tracker/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.practicum.Tracker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		C1CA0C452C5CFADF006EA49F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Tracker/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.practicum.Tracker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		C1CA0C472C5CFADF006EA49F /* Debug */ = {
+		C13CFD782C8E40F700E7800F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -251,7 +258,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -262,7 +269,7 @@
 			};
 			name = Debug;
 		};
-		C1CA0C482C5CFADF006EA49F /* Release */ = {
+		C13CFD792C8E40F700E7800F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -308,7 +315,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -318,28 +325,80 @@
 			};
 			name = Release;
 		};
+		C13CFD7B2C8E40F700E7800F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tracker/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = practicum.Tracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C13CFD7C2C8E40F700E7800F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tracker/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = practicum.Tracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C1CA0C2B2C5CFADC006EA49F /* Build configuration list for PBXProject "Tracker" */ = {
+		C13CFD612C8E40F500E7800F /* Build configuration list for PBXProject "Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C1CA0C472C5CFADF006EA49F /* Debug */,
-				C1CA0C482C5CFADF006EA49F /* Release */,
+				C13CFD782C8E40F700E7800F /* Debug */,
+				C13CFD792C8E40F700E7800F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C1CA0C432C5CFADF006EA49F /* Build configuration list for PBXNativeTarget "Tracker" */ = {
+		C13CFD7A2C8E40F700E7800F /* Build configuration list for PBXNativeTarget "Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C1CA0C442C5CFADF006EA49F /* Debug */,
-				C1CA0C452C5CFADF006EA49F /* Release */,
+				C13CFD7B2C8E40F700E7800F /* Debug */,
+				C13CFD7C2C8E40F700E7800F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = C1CA0C282C5CFADC006EA49F /* Project object */;
+	rootObject = C13CFD5E2C8E40F500E7800F /* Project object */;
 }
