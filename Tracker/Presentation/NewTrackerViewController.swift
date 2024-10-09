@@ -206,14 +206,14 @@ extension NewTrackerViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
+
         cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = .ypBackground
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17)
-        cell.detailTextLabel?.textColor = .gray
-        
-        
+        cell.detailTextLabel?.textColor = .ypGray
+                
         if trackerType == .habit && indexPath.row == 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             cell.textLabel?.text = "Расписание"

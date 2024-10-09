@@ -29,6 +29,8 @@ final class ScheduleViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(WeekdayCell.self, forCellReuseIdentifier: "WeekdayCell")
+        tableView.layer.cornerRadius = 16
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -63,8 +65,8 @@ final class ScheduleViewController: UIViewController {
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
             tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -20),
 
             doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
@@ -91,6 +93,12 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "WeekdayCell", for: indexPath) as! WeekdayCell
+        
+        cell.backgroundColor = .ypBackground
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17)
+        cell.detailTextLabel?.textColor = .ypGray
+        
         let weekday = Weekday.allCases[indexPath.row]
         cell.configure(with: weekday, isSelected: selectedWeekdays.contains(weekday))
         cell.onSwitchValueChanged = { [weak self] isOn in
@@ -100,6 +108,11 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
                 self?.selectedWeekdays.remove(weekday)
             }
         }
+        
+        if indexPath.row == 7 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        }
+        
         return cell
     }
 
@@ -113,6 +126,10 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
+    }
 }
 
 // MARK: - WeekdayCell
@@ -120,7 +137,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
 final class WeekdayCell: UITableViewCell {
     private let weekdayLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 17)
         return label
     }()
 
