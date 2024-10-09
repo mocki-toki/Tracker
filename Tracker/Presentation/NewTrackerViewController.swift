@@ -145,6 +145,7 @@ final class NewTrackerViewController: UIViewController {
     
     private func setupKeyboardDismissal() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         
         nameTextField.delegate = self
