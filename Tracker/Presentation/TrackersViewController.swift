@@ -325,6 +325,14 @@ extension TrackersViewController {
     }
 
     private func toggleTrackerCompletion(_ tracker: Tracker) {
+        let currentDate = Date()
+        if self.currentDate > currentDate {
+            let alert = UIAlertController(title: "Ошибка", message: "Нельзя отметить трекер на будущую дату", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
         if let index = completedTrackers.firstIndex(where: { $0.trackerId == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: currentDate) }) {
             completedTrackers.remove(at: index)
         } else {
