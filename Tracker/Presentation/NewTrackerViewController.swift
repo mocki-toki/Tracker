@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewTrackerViewController: UIViewController {
+final class NewTrackerViewController: UIViewController, UIConfigurable {
     // MARK: - Constants
     
     private enum Constants {
@@ -55,12 +55,7 @@ final class NewTrackerViewController: UIViewController {
     }
     
     // MARK: - Properties
-    
-    enum TrackerType {
-        case habit
-        case irregularEvent
-    }
-    
+
     private let trackerType: TrackerType
     private var selectedSchedule: Set<Weekday> = []
     
@@ -130,6 +125,7 @@ final class NewTrackerViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -139,18 +135,23 @@ final class NewTrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
         configureForTrackerType()
         setupKeyboardDismissal()
     }
 
-    
     // MARK: - UI Setup
     
-    private func setupUI() {
+    func setupUI() {
         view.backgroundColor = Constants.Colors.background
         
         [titleLabel, nameTextField, tableView, cancelButton, createButton].forEach { view.addSubview($0) }
         
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        updateCreateButtonState()
+    }
+    
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Paddings.titleTopPadding),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -175,9 +176,6 @@ final class NewTrackerViewController: UIViewController {
             createButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
             createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: Constants.Paddings.buttonSpacing)
         ])
-        
-        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        updateCreateButtonState()
     }
     
     private func configureForTrackerType() {
@@ -313,6 +311,5 @@ extension NewTrackerViewController {
         present(scheduleVC, animated: true, completion: nil)
     }
     
-    private func showCategoryViewController() {
-    }
+    private func showCategoryViewController() {}
 }

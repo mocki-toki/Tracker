@@ -7,9 +7,9 @@
 
 import UIKit
 
-final class TrackersViewController: UIViewController {
+final class TrackersViewController: UIViewController, UIConfigurable {
     // MARK: - Constants
-    
+
     private enum Constants {
         enum Texts {
             static let trackers = NSLocalizedString("Trackers", comment: "Title for trackers section or tab")
@@ -20,18 +20,18 @@ final class TrackersViewController: UIViewController {
             static let ok = "OK"
             static let generalCategory = "Общее"
         }
-        
+
         enum Fonts {
             static let titleFont = UIFont.systemFont(ofSize: 34, weight: .bold)
             static let placeholderFont = UIFont.systemFont(ofSize: 12, weight: .medium)
         }
-        
+
         enum Colors {
             static let background = UIColor.white
             static let tint = UIColor.ypBlack
             static let placeholderText = UIColor.ypBlack
         }
-        
+
         enum Sizes {
             static let addButtonTopPadding: CGFloat = 16
             static let addButtonLeadingPadding: CGFloat = 16
@@ -148,7 +148,7 @@ final class TrackersViewController: UIViewController {
 
     // MARK: - UI Setup
 
-    private func setupUI() {
+    func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
         [addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView].forEach { view.addSubview($0) }
@@ -156,7 +156,7 @@ final class TrackersViewController: UIViewController {
         [placeholderImageView, placeholderLabel].forEach { placeholderView.addSubview($0) }
     }
 
-    private func setupConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Sizes.addButtonTopPadding),
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.addButtonLeadingPadding),
@@ -249,7 +249,7 @@ final class TrackersViewController: UIViewController {
         present(typeSelectionVC, animated: true)
     }
 
-    private func presentNewTrackerViewController(for type: NewTrackerViewController.TrackerType) {
+    private func presentNewTrackerViewController(for type: TrackerType) {
         let newTrackerVC = NewTrackerViewController(type: type)
         newTrackerVC.onTrackerCreated = { [weak self] newTracker in
             self?.addNewTracker(newTracker)
@@ -376,7 +376,7 @@ extension TrackersViewController {
             present(alert, animated: true, completion: nil)
             return
         }
-        
+
         if let index = completedTrackers.firstIndex(where: { $0.trackerId == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: currentDate) }) {
             completedTrackers.remove(at: index)
         } else {

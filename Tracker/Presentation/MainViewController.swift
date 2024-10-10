@@ -7,9 +7,9 @@
 
 import UIKit
 
-final class MainViewController: UIViewController {
+final class MainViewController: UIViewController, UIConfigurable {
     // MARK: - Constants
-    
+
     private enum Constants {
         enum TabBar {
             static let trackersTitle = NSLocalizedString("Trackers", comment: "Trackers tab bar item")
@@ -17,12 +17,12 @@ final class MainViewController: UIViewController {
             static let trackersTag = 0
             static let statisticsTag = 1
         }
-        
+
         enum Layout {
             static let tabBarLeadingPadding: CGFloat = 0
             static let tabBarTrailingPadding: CGFloat = 0
         }
-        
+
         enum Colors {
             static let tabBarTint = UIColor.ypBlue
             static let background = UIColor.systemBackground
@@ -79,12 +79,12 @@ final class MainViewController: UIViewController {
 
     // MARK: - UI Setup
 
-    private func setupUI() {
+    func setupUI() {
         view.backgroundColor = Constants.Colors.background
         [containerView, tabBar].forEach { view.addSubview($0) }
     }
 
-    private func setupConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

@@ -193,6 +193,7 @@
     },
     "Fri" : {
       "comment" : "Short name for Friday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -210,6 +211,7 @@
     },
     "Friday" : {
       "comment" : "Full name for Friday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -261,6 +263,7 @@
     },
     "Mon" : {
       "comment" : "Short name for Monday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -278,6 +281,7 @@
     },
     "Monday" : {
       "comment" : "Full name for Monday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -329,6 +333,7 @@
     },
     "Sat" : {
       "comment" : "Short name for Saturday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -346,6 +351,7 @@
     },
     "Saturday" : {
       "comment" : "Full name for Saturday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -414,6 +420,7 @@
     },
     "Sun" : {
       "comment" : "Short name for Sunday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -431,6 +438,7 @@
     },
     "Sunday" : {
       "comment" : "Full name for Sunday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -448,6 +456,7 @@
     },
     "Thu" : {
       "comment" : "Short name for Thursday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -465,6 +474,7 @@
     },
     "Thursday" : {
       "comment" : "Full name for Thursday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -499,6 +509,7 @@
     },
     "Tue" : {
       "comment" : "Short name for Tuesday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -516,6 +527,7 @@
     },
     "Tuesday" : {
       "comment" : "Full name for Tuesday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -533,6 +545,7 @@
     },
     "Wed" : {
       "comment" : "Short name for Wednesday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -550,6 +563,7 @@
     },
     "Wednesday" : {
       "comment" : "Full name for Wednesday",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

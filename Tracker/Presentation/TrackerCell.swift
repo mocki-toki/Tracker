@@ -7,9 +7,9 @@
 
 import UIKit
 
-final class TrackerCell: UICollectionViewCell {
+final class TrackerCell: UICollectionViewCell, UIConfigurable {
     // MARK: - Constants
-    
+
     private enum Constants {
         enum Sizes {
             static let cornerRadius: CGFloat = 16
@@ -19,13 +19,13 @@ final class TrackerCell: UICollectionViewCell {
             static let plusButtonSize: CGFloat = 34
             static let plusButtonCornerRadius: CGFloat = 17
         }
-        
+
         enum Fonts {
             static let emojiFont = UIFont.systemFont(ofSize: 14)
             static let nameFont = UIFont.systemFont(ofSize: 12, weight: .medium)
             static let daysCountFont = UIFont.systemFont(ofSize: 12, weight: .medium)
         }
-        
+
         enum Colors {
             static let emojiBackground = UIColor.white.withAlphaComponent(0.3)
             static let nameText = UIColor.white
@@ -33,14 +33,14 @@ final class TrackerCell: UICollectionViewCell {
             static let plusButtonTint = UIColor.white
             static let plusButtonBorder = UIColor.white
         }
-        
+
         enum Paddings {
             static let cardViewPadding: CGFloat = 12
             static let nameLabelTopPadding: CGFloat = 8
             static let daysCountTopPadding: CGFloat = 16
             static let daysCountBottomPadding: CGFloat = 24
         }
-        
+
         static let reuseIdentifier = "TrackerCell"
     }
 
@@ -106,7 +106,8 @@ final class TrackerCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        setupUI()
+        setupConstraints()
     }
 
     @available(*, unavailable)
@@ -116,10 +117,12 @@ final class TrackerCell: UICollectionViewCell {
 
     // MARK: - Setup
 
-    private func setupViews() {
+    func setupUI() {
         [cardView, daysCountLabel, plusButton].forEach { contentView.addSubview($0) }
         [emojiLabel, nameLabel].forEach { cardView.addSubview($0) }
+    }
 
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -180,57 +183,5 @@ final class TrackerCell: UICollectionViewCell {
 
     private func pluralizeDays(_ count: Int) -> String {
         return String.localizedStringWithFormat(NSLocalizedString("Days", comment: "Number of days"), count)
-    }
-}
-
-class CategoryHeaderView: UICollectionReusableView {
-    // MARK: - Constants
-    
-    private enum Constants {
-        static let titleFont = UIFont.systemFont(ofSize: 19, weight: .bold)
-        static let leadingPadding: CGFloat = 28
-        static let trailingPadding: CGFloat = 28
-    }
-    
-    // MARK: - UI Components
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = Constants.titleFont
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    var text: String? {
-        get {
-            titleLabel.text
-        }
-        set {
-            titleLabel.text = newValue
-        }
-    }
-
-    // MARK: - Initialization
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Setup
-
-    private func setupViews() {
-        addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.leadingPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.trailingPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
     }
 }

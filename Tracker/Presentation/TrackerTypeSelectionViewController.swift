@@ -7,27 +7,27 @@
 
 import UIKit
 
-final class TrackerTypeSelectionViewController: UIViewController {
+final class TrackerTypeSelectionViewController: UIViewController, UIConfigurable {
     // MARK: - Constants
-    
+
     private enum Constants {
         enum Texts {
             static let createTracker = NSLocalizedString("CreateTracker", comment: "Title for tracker creation screen")
             static let habit = NSLocalizedString("Habit", comment: "Label for habit type tracker")
             static let irregularEvent = NSLocalizedString("IrregularEvent", comment: "Label for irregular event type tracker")
         }
-        
+
         enum Fonts {
             static let titleFont = UIFont.systemFont(ofSize: 16, weight: .medium)
             static let buttonFont = UIFont.boldSystemFont(ofSize: 16)
         }
-        
+
         enum Colors {
             static let background = UIColor.white
             static let buttonBackground = UIColor.black
             static let buttonText = UIColor.white
         }
-        
+
         enum Sizes {
             static let titleTopPadding: CGFloat = 20
             static let buttonStackViewSidePadding: CGFloat = 20
@@ -39,7 +39,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
 
     // MARK: - Properties
 
-    var onTypeSelected: ((NewTrackerViewController.TrackerType) -> Void)?
+    var onTypeSelected: ((TrackerType) -> Void)?
 
     // MARK: - UI Components
 
@@ -89,17 +89,20 @@ final class TrackerTypeSelectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
     }
 
     // MARK: - UI Setup
 
-    private func setupUI() {
+    func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
         [titleLabel, buttonStackView].forEach { view.addSubview($0) }
 
         [habitButton, irregularEventButton].forEach { buttonStackView.addArrangedSubview($0) }
+    }
 
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Sizes.titleTopPadding),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),

@@ -7,18 +7,20 @@
 
 import UIKit
 
-fileprivate enum Constants {
+// MARK: - Constants
+
+private enum Constants {
     enum Texts {
         static let schedule = NSLocalizedString("Schedule", comment: "Title for schedule section")
         static let done = NSLocalizedString("Done", comment: "Button title for completing an action")
     }
-    
+
     enum Sizes {
         static let cornerRadius: CGFloat = 16
         static let cellHeight: CGFloat = 75
         static let buttonHeight: CGFloat = 50
     }
-    
+
     enum Paddings {
         static let titleTopPadding: CGFloat = 20
         static let tableViewTopPadding: CGFloat = 20
@@ -28,7 +30,7 @@ fileprivate enum Constants {
         static let buttonHorizontalPadding: CGFloat = 20
         static let cellContentPadding: CGFloat = 16
     }
-    
+
     enum Colors {
         static let background = UIColor.white
         static let buttonBackground = UIColor.black
@@ -38,14 +40,16 @@ fileprivate enum Constants {
         static let cellDetailText = UIColor.ypGray
         static let switchTint = UIColor.systemBlue
     }
-    
+
     enum Fonts {
         static let titleFont = UIFont.systemFont(ofSize: 16, weight: .medium)
         static let cellFont = UIFont.systemFont(ofSize: 17)
     }
 }
 
-final class ScheduleViewController: UIViewController {
+// MARK: - ScheduleViewController
+
+final class ScheduleViewController: UIViewController, UIConfigurable {
     // MARK: - Properties
 
     var selectedWeekdays: Set<Weekday> = []
@@ -89,15 +93,18 @@ final class ScheduleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
     }
 
     // MARK: - UI Setup
 
-    private func setupUI() {
+    func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
         [titleLabel, tableView, doneButton].forEach { view.addSubview($0) }
+    }
 
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Paddings.titleTopPadding),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -131,12 +138,12 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "WeekdayCell", for: indexPath) as! WeekdayCell
-        
+
         cell.backgroundColor = Constants.Colors.cellBackground
         cell.textLabel?.font = Constants.Fonts.cellFont
         cell.detailTextLabel?.font = Constants.Fonts.cellFont
         cell.detailTextLabel?.textColor = Constants.Colors.cellDetailText
-        
+
         let weekday = Weekday.allCases[indexPath.row]
         cell.configure(with: weekday, isSelected: selectedWeekdays.contains(weekday))
         cell.onSwitchValueChanged = { [weak self] isOn in
@@ -146,11 +153,11 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
                 self?.selectedWeekdays.remove(weekday)
             }
         }
-        
+
         if indexPath.row == Weekday.allCases.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         }
-        
+
         return cell
     }
 
@@ -164,7 +171,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Constants.Sizes.cellHeight
     }
@@ -172,7 +179,9 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - WeekdayCell
 
-final class WeekdayCell: UITableViewCell {
+final class WeekdayCell: UITableViewCell, UIConfigurable {
+    // MARK: - UI Components
+
     private let weekdayLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.Fonts.cellFont
@@ -185,11 +194,16 @@ final class WeekdayCell: UITableViewCell {
         return switchControl
     }()
 
+    // MARK: - Properties
+
     var onSwitchValueChanged: ((Bool) -> Void)?
+
+    // MARK: - Initialization
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupConstraints()
     }
 
     @available(*, unavailable)
@@ -197,12 +211,18 @@ final class WeekdayCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupUI() {
+    // MARK: - UI Setup
+
+    func setupUI() {
         [weekdayLabel, selectionSwitch].forEach { contentView.addSubview($0) }
 
         weekdayLabel.translatesAutoresizingMaskIntoConstraints = false
         selectionSwitch.translatesAutoresizingMaskIntoConstraints = false
 
+        selectionSwitch.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+    }
+
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             weekdayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Paddings.cellContentPadding),
             weekdayLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -210,14 +230,16 @@ final class WeekdayCell: UITableViewCell {
             selectionSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Paddings.cellContentPadding),
             selectionSwitch.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-
-        selectionSwitch.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
     }
+
+    // MARK: - Configuration
 
     func configure(with weekday: Weekday, isSelected: Bool) {
         weekdayLabel.text = weekday.fullTitle
         selectionSwitch.isOn = isSelected
     }
+
+    // MARK: - Actions
 
     @objc private func switchValueChanged() {
         onSwitchValueChanged?(selectionSwitch.isOn)
