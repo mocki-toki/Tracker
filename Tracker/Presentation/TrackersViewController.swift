@@ -8,6 +8,51 @@
 import UIKit
 
 final class TrackersViewController: UIViewController {
+    // MARK: - Constants
+    
+    private enum Constants {
+        enum Texts {
+            static let trackers = NSLocalizedString("Trackers", comment: "Title for trackers section or tab")
+            static let search = NSLocalizedString("Search", comment: "Title for search functionality")
+            static let whatToTrack = NSLocalizedString("WhatToTrack", comment: "Prompt asking what to track")
+            static let error = NSLocalizedString("Error", comment: "Generic error title")
+            static let cannotMarkFutureDate = NSLocalizedString("CannotMarkFutureDate", comment: "Error message when trying to mark a tracker for a future date")
+            static let ok = "OK"
+            static let generalCategory = "Общее"
+        }
+        
+        enum Fonts {
+            static let titleFont = UIFont.systemFont(ofSize: 34, weight: .bold)
+            static let placeholderFont = UIFont.systemFont(ofSize: 12, weight: .medium)
+        }
+        
+        enum Colors {
+            static let background = UIColor.white
+            static let tint = UIColor.ypBlack
+            static let placeholderText = UIColor.ypBlack
+        }
+        
+        enum Sizes {
+            static let addButtonTopPadding: CGFloat = 16
+            static let addButtonLeadingPadding: CGFloat = 16
+            static let datePickerTopPadding: CGFloat = 16
+            static let datePickerTrailingPadding: CGFloat = 16
+            static let titleTopPadding: CGFloat = 16
+            static let titleLeadingPadding: CGFloat = 16
+            static let searchBarTopPadding: CGFloat = 8
+            static let searchBarHorizontalPadding: CGFloat = 8
+            static let collectionViewTopPadding: CGFloat = 8
+            static let placeholderImageSize: CGFloat = 80
+            static let placeholderLabelTopPadding: CGFloat = 8
+            static let cellWidth: CGFloat = 2
+            static let cellHeight: CGFloat = 148
+            static let headerHeight: CGFloat = 18
+            static let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+            static let interItemSpacing: CGFloat = 9
+            static let lineSpacing: CGFloat = 16
+        }
+    }
+
     // MARK: - Properties
 
     private var categories: [TrackerCategory] = []
@@ -21,7 +66,7 @@ final class TrackersViewController: UIViewController {
     private lazy var addButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(.ypAdd, for: .normal)
-        button.tintColor = .ypBlack
+        button.tintColor = Constants.Colors.tint
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -38,8 +83,8 @@ final class TrackersViewController: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("Trackers", comment: "Title for trackers section or tab")
-        label.font = .systemFont(ofSize: 34, weight: .bold)
+        label.text = Constants.Texts.trackers
+        label.font = Constants.Fonts.titleFont
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -47,7 +92,7 @@ final class TrackersViewController: UIViewController {
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = NSLocalizedString("Search", comment: "Title for search functionality")
+        searchBar.placeholder = Constants.Texts.search
         searchBar.delegate = self
         searchBar.backgroundImage = UIImage()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -69,10 +114,10 @@ final class TrackersViewController: UIViewController {
 
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("WhatToTrack", comment: "Prompt asking what to track")
+        label.text = Constants.Texts.whatToTrack
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlack
+        label.font = Constants.Fonts.placeholderFont
+        label.textColor = Constants.Colors.placeholderText
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -82,7 +127,7 @@ final class TrackersViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = Constants.Colors.background
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
@@ -104,7 +149,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - UI Setup
 
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = Constants.Colors.background
 
         [addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView].forEach { view.addSubview($0) }
 
@@ -113,20 +158,20 @@ final class TrackersViewController: UIViewController {
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Sizes.addButtonTopPadding),
+            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.addButtonLeadingPadding),
 
-            datePicker.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            datePicker.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Sizes.datePickerTopPadding),
+            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Sizes.datePickerTrailingPadding),
 
-            titleLabel.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: Constants.Sizes.titleTopPadding),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.titleLeadingPadding),
 
-            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.Sizes.searchBarTopPadding),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.searchBarHorizontalPadding),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Sizes.searchBarHorizontalPadding),
 
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: Constants.Sizes.collectionViewTopPadding),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -136,10 +181,10 @@ final class TrackersViewController: UIViewController {
 
             placeholderImageView.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor),
             placeholderImageView.topAnchor.constraint(equalTo: placeholderView.topAnchor),
-            placeholderImageView.widthAnchor.constraint(equalToConstant: 80),
-            placeholderImageView.heightAnchor.constraint(equalToConstant: 80),
+            placeholderImageView.widthAnchor.constraint(equalToConstant: Constants.Sizes.placeholderImageSize),
+            placeholderImageView.heightAnchor.constraint(equalToConstant: Constants.Sizes.placeholderImageSize),
 
-            placeholderLabel.topAnchor.constraint(equalTo: placeholderImageView.bottomAnchor, constant: 8),
+            placeholderLabel.topAnchor.constraint(equalTo: placeholderImageView.bottomAnchor, constant: Constants.Sizes.placeholderLabelTopPadding),
             placeholderLabel.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor),
             placeholderLabel.bottomAnchor.constraint(equalTo: placeholderView.bottomAnchor)
         ])
@@ -217,7 +262,7 @@ final class TrackersViewController: UIViewController {
     }
 
     private func addNewTracker(_ tracker: Tracker) {
-        let categoryName = "Общее"
+        let categoryName = Constants.Texts.generalCategory
         if let index = categories.firstIndex(where: { $0.title == categoryName }) {
             let existingCategory = categories[index]
             let updatedTrackers = existingCategory.trackers + [tracker]
@@ -288,28 +333,27 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let insets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
-        let interItemSpacing: CGFloat = 9
+        let insets = Constants.Sizes.sectionInsets
+        let interItemSpacing = Constants.Sizes.interItemSpacing
         let availableWidth = collectionView.frame.width - insets.left - insets.right - interItemSpacing
-        let cellWidth = availableWidth / 2
-        let cellHeight: CGFloat = 148
-        return CGSize(width: cellWidth, height: cellHeight)
+        let cellWidth = availableWidth / Constants.Sizes.cellWidth
+        return CGSize(width: cellWidth, height: Constants.Sizes.cellHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 18)
+        return CGSize(width: collectionView.bounds.width, height: Constants.Sizes.headerHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        return Constants.Sizes.sectionInsets
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
+        return Constants.Sizes.interItemSpacing
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+        return Constants.Sizes.lineSpacing
     }
 }
 
@@ -327,8 +371,8 @@ extension TrackersViewController {
     private func toggleTrackerCompletion(_ tracker: Tracker) {
         let currentDate = Date()
         if self.currentDate > currentDate {
-            let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Generic error title"), message: NSLocalizedString("CannotMarkFutureDate", comment: "Error message when trying to mark a tracker for a future date"), preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            let alert = UIAlertController(title: Constants.Texts.error, message: Constants.Texts.cannotMarkFutureDate, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: Constants.Texts.ok, style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
             return
         }

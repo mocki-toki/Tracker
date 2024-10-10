@@ -8,9 +8,45 @@
 import UIKit
 
 final class TrackerCell: UICollectionViewCell {
+    // MARK: - Constants
+    
+    private enum Constants {
+        enum Sizes {
+            static let cornerRadius: CGFloat = 16
+            static let emojiLabelCornerRadius: CGFloat = 12
+            static let cardViewHeight: CGFloat = 90
+            static let emojiLabelSize: CGFloat = 24
+            static let plusButtonSize: CGFloat = 34
+            static let plusButtonCornerRadius: CGFloat = 17
+        }
+        
+        enum Fonts {
+            static let emojiFont = UIFont.systemFont(ofSize: 14)
+            static let nameFont = UIFont.systemFont(ofSize: 12, weight: .medium)
+            static let daysCountFont = UIFont.systemFont(ofSize: 12, weight: .medium)
+        }
+        
+        enum Colors {
+            static let emojiBackground = UIColor.white.withAlphaComponent(0.3)
+            static let nameText = UIColor.white
+            static let daysCountText = UIColor.black
+            static let plusButtonTint = UIColor.white
+            static let plusButtonBorder = UIColor.white
+        }
+        
+        enum Paddings {
+            static let cardViewPadding: CGFloat = 12
+            static let nameLabelTopPadding: CGFloat = 8
+            static let daysCountTopPadding: CGFloat = 16
+            static let daysCountBottomPadding: CGFloat = 24
+        }
+        
+        static let reuseIdentifier = "TrackerCell"
+    }
+
     // MARK: - Properties
 
-    static let reuseIdentifier = "TrackerCell"
+    static let reuseIdentifier = Constants.reuseIdentifier
 
     var onPlusButtonTap: (() -> Void)?
 
@@ -18,7 +54,7 @@ final class TrackerCell: UICollectionViewCell {
 
     private let cardView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.Sizes.cornerRadius
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -26,10 +62,10 @@ final class TrackerCell: UICollectionViewCell {
 
     private let emojiLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = Constants.Fonts.emojiFont
         label.textAlignment = .center
-        label.backgroundColor = .white.withAlphaComponent(0.3)
-        label.layer.cornerRadius = 12
+        label.backgroundColor = Constants.Colors.emojiBackground
+        label.layer.cornerRadius = Constants.Sizes.emojiLabelCornerRadius
         label.clipsToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -37,8 +73,8 @@ final class TrackerCell: UICollectionViewCell {
 
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .white
+        label.font = Constants.Fonts.nameFont
+        label.textColor = Constants.Colors.nameText
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -46,8 +82,8 @@ final class TrackerCell: UICollectionViewCell {
 
     private let daysCountLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .black
+        label.font = Constants.Fonts.daysCountFont
+        label.textColor = Constants.Colors.daysCountText
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -56,11 +92,11 @@ final class TrackerCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.imageView?.frame.size = CGSize(width: 8, height: 8)
-        button.tintColor = .white
+        button.tintColor = Constants.Colors.plusButtonTint
         button.backgroundColor = .clear
-        button.layer.cornerRadius = 17
+        button.layer.cornerRadius = Constants.Sizes.plusButtonCornerRadius
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderColor = Constants.Colors.plusButtonBorder.cgColor
         button.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -88,26 +124,26 @@ final class TrackerCell: UICollectionViewCell {
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cardView.heightAnchor.constraint(equalToConstant: 90),
+            cardView.heightAnchor.constraint(equalToConstant: Constants.Sizes.cardViewHeight),
 
-            emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
-            emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            emojiLabel.widthAnchor.constraint(equalToConstant: 24),
-            emojiLabel.heightAnchor.constraint(equalToConstant: 24),
+            emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: Constants.Paddings.cardViewPadding),
+            emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
+            emojiLabel.widthAnchor.constraint(equalToConstant: Constants.Sizes.emojiLabelSize),
+            emojiLabel.heightAnchor.constraint(equalToConstant: Constants.Sizes.emojiLabelSize),
 
-            nameLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 8),
-            nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            nameLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
+            nameLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: Constants.Paddings.nameLabelTopPadding),
+            nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
+            nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.Paddings.cardViewPadding),
+            nameLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -Constants.Paddings.cardViewPadding),
 
-            daysCountLabel.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 16),
-            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            daysCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            daysCountLabel.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: Constants.Paddings.daysCountTopPadding),
+            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
+            daysCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.Paddings.daysCountBottomPadding),
 
             plusButton.centerYAnchor.constraint(equalTo: daysCountLabel.centerYAnchor),
-            plusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            plusButton.widthAnchor.constraint(equalToConstant: 34),
-            plusButton.heightAnchor.constraint(equalToConstant: 34)
+            plusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Paddings.cardViewPadding),
+            plusButton.widthAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize),
+            plusButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize)
         ])
     }
 
@@ -148,9 +184,19 @@ final class TrackerCell: UICollectionViewCell {
 }
 
 class CategoryHeaderView: UICollectionReusableView {
+    // MARK: - Constants
+    
+    private enum Constants {
+        static let titleFont = UIFont.systemFont(ofSize: 19, weight: .bold)
+        static let leadingPadding: CGFloat = 28
+        static let trailingPadding: CGFloat = 28
+    }
+    
+    // MARK: - UI Components
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.font = Constants.titleFont
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -164,6 +210,8 @@ class CategoryHeaderView: UICollectionReusableView {
         }
     }
 
+    // MARK: - Initialization
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -174,12 +222,14 @@ class CategoryHeaderView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Setup
+
     private func setupViews() {
         addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -28),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.leadingPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.trailingPadding),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

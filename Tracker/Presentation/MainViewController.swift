@@ -8,14 +8,36 @@
 import UIKit
 
 final class MainViewController: UIViewController {
+    // MARK: - Constants
+    
+    private enum Constants {
+        enum TabBar {
+            static let trackersTitle = NSLocalizedString("Trackers", comment: "Trackers tab bar item")
+            static let statisticsTitle = NSLocalizedString("Statistics", comment: "Statistics tab bar item")
+            static let trackersTag = 0
+            static let statisticsTag = 1
+        }
+        
+        enum Layout {
+            static let tabBarLeadingPadding: CGFloat = 0
+            static let tabBarTrailingPadding: CGFloat = 0
+        }
+        
+        enum Colors {
+            static let tabBarTint = UIColor.ypBlue
+            static let background = UIColor.systemBackground
+            static let statisticsBackground = UIColor.white
+        }
+    }
+
     // MARK: - UI Components
 
     private lazy var tabBar: UITabBar = {
         let tabBar = UITabBar()
-        tabBar.tintColor = .ypBlue
+        tabBar.tintColor = Constants.Colors.tabBarTint
         tabBar.items = [
-            UITabBarItem(title: NSLocalizedString("Trackers", comment: "Trackers tab bar item"), image: .ypTrackers, tag: 0),
-            UITabBarItem(title: NSLocalizedString("Statistics", comment: "Statistics tab bar item"), image: .ypStatistics, tag: 1)
+            UITabBarItem(title: Constants.TabBar.trackersTitle, image: .ypTrackers, tag: Constants.TabBar.trackersTag),
+            UITabBarItem(title: Constants.TabBar.statisticsTitle, image: .ypStatistics, tag: Constants.TabBar.statisticsTag)
         ]
         tabBar.selectedItem = tabBar.items?.first
         tabBar.delegate = self
@@ -34,9 +56,9 @@ final class MainViewController: UIViewController {
     private lazy var trackersViewController = TrackersViewController()
     private lazy var statisticsViewController: UIViewController = {
         let viewController = UIViewController()
-        viewController.view.backgroundColor = .white
+        viewController.view.backgroundColor = Constants.Colors.statisticsBackground
         let label = UILabel()
-        label.text = NSLocalizedString("Statistics", comment: "Statistics tab bar item")
+        label.text = Constants.TabBar.statisticsTitle
         label.translatesAutoresizingMaskIntoConstraints = false
         viewController.view.addSubview(label)
         NSLayoutConstraint.activate([
@@ -58,7 +80,7 @@ final class MainViewController: UIViewController {
     // MARK: - UI Setup
 
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = Constants.Colors.background
         [containerView, tabBar].forEach { view.addSubview($0) }
     }
 
@@ -69,8 +91,8 @@ final class MainViewController: UIViewController {
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
 
-            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.tabBarLeadingPadding),
+            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Layout.tabBarTrailingPadding),
             tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
@@ -95,8 +117,8 @@ final class MainViewController: UIViewController {
 
     private func viewControllerForTab(at index: Int) -> UIViewController? {
         switch index {
-        case 0: return trackersViewController
-        case 1: return statisticsViewController
+        case Constants.TabBar.trackersTag: return trackersViewController
+        case Constants.TabBar.statisticsTag: return statisticsViewController
         default: return nil
         }
     }

@@ -8,6 +8,52 @@
 import UIKit
 
 final class NewTrackerViewController: UIViewController {
+    // MARK: - Constants
+    
+    private enum Constants {
+        enum Texts {
+            static let enterTrackName = NSLocalizedString("EnterTrackName", comment: "Enter track name hint")
+            static let cancel = NSLocalizedString("Cancel", comment: "Cancel button")
+            static let create = NSLocalizedString("Create", comment: "Create button")
+            static let newHabit = NSLocalizedString("NewHabit", comment: "Title for creating a new habit")
+            static let newIrregularEvent = NSLocalizedString("NewIrregularEvent", comment: "Title for creating a new irregular event")
+            static let schedule = NSLocalizedString("Schedule", comment: "Button for schedule section")
+            static let category = NSLocalizedString("Category", comment: "Button for category selection")
+            static let generalCategory = "Общее"
+        }
+        
+        enum Sizes {
+            static let cornerRadius: CGFloat = 16
+            static let textFieldHeight: CGFloat = 75
+            static let buttonHeight: CGFloat = 60
+            static let tableViewCellHeight: CGFloat = 75
+        }
+        
+        enum Paddings {
+            static let titleTopPadding: CGFloat = 27
+            static let textFieldTopPadding: CGFloat = 38
+            static let tableViewTopPadding: CGFloat = 24
+            static let horizontalPadding: CGFloat = 16
+            static let buttonBottomPadding: CGFloat = 16
+            static let buttonSpacing: CGFloat = 8
+        }
+        
+        enum Colors {
+            static let background = UIColor.ypWhite
+            static let textFieldBackground = UIColor.ypBackground
+            static let cellBackground = UIColor.ypBackground
+            static let cancelButtonBorder = UIColor.red
+            static let createButtonBackground = UIColor.ypBlack
+            static let createButtonText = UIColor.white
+            static let detailTextColor = UIColor.ypGray
+        }
+        
+        enum Fonts {
+            static let titleFont = UIFont.systemFont(ofSize: 16, weight: .medium)
+            static let cellTextFont = UIFont.systemFont(ofSize: 17)
+        }
+    }
+    
     // MARK: - Properties
     
     enum TrackerType {
@@ -24,7 +70,7 @@ final class NewTrackerViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = Constants.Fonts.titleFont
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -32,10 +78,10 @@ final class NewTrackerViewController: UIViewController {
     
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = NSLocalizedString("EnterTrackName", comment: "Enter track name hint")
-        textField.backgroundColor = .ypBackground
-        textField.layer.cornerRadius = 16
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
+        textField.placeholder = Constants.Texts.enterTrackName
+        textField.backgroundColor = Constants.Colors.textFieldBackground
+        textField.layer.cornerRadius = Constants.Sizes.cornerRadius
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: Constants.Paddings.horizontalPadding, height: textField.frame.height))
         textField.leftViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -47,19 +93,19 @@ final class NewTrackerViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.isScrollEnabled = false
-        tableView.layer.cornerRadius = 16
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.layer.cornerRadius = Constants.Sizes.cornerRadius
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: Constants.Paddings.horizontalPadding, bottom: 0, right: Constants.Paddings.horizontalPadding)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(NSLocalizedString("Cancel", comment: "Cancel button"), for: .normal)
+        button.setTitle(Constants.Texts.cancel, for: .normal)
         button.setTitleColor(.red, for: .normal)
-        button.layer.cornerRadius = 16
+        button.layer.cornerRadius = Constants.Sizes.cornerRadius
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.red.cgColor
+        button.layer.borderColor = Constants.Colors.cancelButtonBorder.cgColor
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -67,10 +113,10 @@ final class NewTrackerViewController: UIViewController {
     
     private lazy var createButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(NSLocalizedString("Create", comment: "Create button"), for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .ypBlack
-        button.layer.cornerRadius = 16
+        button.setTitle(Constants.Texts.create, for: .normal)
+        button.setTitleColor(Constants.Colors.createButtonText, for: .normal)
+        button.backgroundColor = Constants.Colors.createButtonBackground
+        button.layer.cornerRadius = Constants.Sizes.cornerRadius
         button.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
@@ -101,33 +147,33 @@ final class NewTrackerViewController: UIViewController {
     // MARK: - UI Setup
     
     private func setupUI() {
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = Constants.Colors.background
         
         [titleLabel, nameTextField, tableView, cancelButton, createButton].forEach { view.addSubview($0) }
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Paddings.titleTopPadding),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            nameTextField.heightAnchor.constraint(equalToConstant: 75),
+            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.Paddings.textFieldTopPadding),
+            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
+            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
+            nameTextField.heightAnchor.constraint(equalToConstant: Constants.Sizes.textFieldHeight),
             
-            tableView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.heightAnchor.constraint(equalToConstant: trackerType == .habit ? 150 : 75),
+            tableView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: Constants.Paddings.tableViewTopPadding),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
+            tableView.heightAnchor.constraint(equalToConstant: trackerType == .habit ? Constants.Sizes.tableViewCellHeight * 2 : Constants.Sizes.tableViewCellHeight),
             
-            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            cancelButton.heightAnchor.constraint(equalToConstant: 60),
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.Paddings.buttonBottomPadding),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
+            cancelButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
             cancelButton.widthAnchor.constraint(equalTo: createButton.widthAnchor),
             
-            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 8)
+            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.Paddings.buttonBottomPadding),
+            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
+            createButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
+            createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: Constants.Paddings.buttonSpacing)
         ])
         
         nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -137,9 +183,9 @@ final class NewTrackerViewController: UIViewController {
     private func configureForTrackerType() {
         switch trackerType {
         case .habit:
-            titleLabel.text = NSLocalizedString("NewHabit", comment: "Title for creating a new habit")
+            titleLabel.text = Constants.Texts.newHabit
         case .irregularEvent:
-            titleLabel.text = NSLocalizedString("NewIrregularEvent", comment: "Title for creating a new irregular event")
+            titleLabel.text = Constants.Texts.newIrregularEvent
         }
     }
     
@@ -185,12 +231,8 @@ final class NewTrackerViewController: UIViewController {
         let isNameValid = !(nameTextField.text?.isEmpty ?? true)
         let isScheduleValid = trackerType == .irregularEvent || !selectedSchedule.isEmpty
         createButton.isEnabled = isNameValid && isScheduleValid
-        createButton.backgroundColor = .ypBlack;
-        if createButton.isEnabled {
-            createButton.layer.opacity = 1
-        } else {
-            createButton.layer.opacity = 0.5
-        }
+        createButton.backgroundColor = Constants.Colors.createButtonBackground
+        createButton.layer.opacity = createButton.isEnabled ? 1 : 0.5
     }
 }
 
@@ -209,24 +251,24 @@ extension NewTrackerViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
 
         cell.accessoryType = .disclosureIndicator
-        cell.backgroundColor = .ypBackground
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
-        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17)
-        cell.detailTextLabel?.textColor = .ypGray
+        cell.backgroundColor = Constants.Colors.cellBackground
+        cell.textLabel?.font = Constants.Fonts.cellTextFont
+        cell.detailTextLabel?.font = Constants.Fonts.cellTextFont
+        cell.detailTextLabel?.textColor = Constants.Colors.detailTextColor
                 
         if trackerType == .habit && indexPath.row == 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-            cell.textLabel?.text = NSLocalizedString("Schedule", comment: "Button for schedule section")
+            cell.textLabel?.text = Constants.Texts.schedule
             if !selectedSchedule.isEmpty {
                 let weekdayStrings = selectedSchedule.map { $0.shortTitle }
                 cell.detailTextLabel?.text = weekdayStrings.joined(separator: ", ")
             }
         } else {
-            if(trackerType == .irregularEvent ) {
+            if trackerType == .irregularEvent {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             }
-            cell.textLabel?.text = NSLocalizedString("Category", comment: "Button for category selection")
-            cell.detailTextLabel?.text = "Общее"
+            cell.textLabel?.text = Constants.Texts.category
+            cell.detailTextLabel?.text = Constants.Texts.generalCategory
         }
         
         return cell
@@ -243,7 +285,7 @@ extension NewTrackerViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return Constants.Sizes.tableViewCellHeight
     }
 }
 
