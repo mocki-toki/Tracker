@@ -14,8 +14,8 @@ final class MainViewController: UIViewController {
         let tabBar = UITabBar()
         tabBar.tintColor = .ypBlue
         tabBar.items = [
-            UITabBarItem(title: "Трекеры", image: .ypTrackers, tag: 0),
-            UITabBarItem(title: "Статистика", image: .ypStatistics, tag: 1)
+            UITabBarItem(title: NSLocalizedString("Trackers", comment: "Trackers tab bar item"), image: .ypTrackers, tag: 0),
+            UITabBarItem(title: NSLocalizedString("Statistics", comment: "Statistics tab bar item"), image: .ypStatistics, tag: 1)
         ]
         tabBar.selectedItem = tabBar.items?.first
         tabBar.delegate = self
@@ -36,7 +36,7 @@ final class MainViewController: UIViewController {
         let viewController = UIViewController()
         viewController.view.backgroundColor = .white
         let label = UILabel()
-        label.text = "Статистика"
+        label.text = NSLocalizedString("Statistics", comment: "Statistics tab bar item")
         label.translatesAutoresizingMaskIntoConstraints = false
         viewController.view.addSubview(label)
         NSLayoutConstraint.activate([

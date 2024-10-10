@@ -38,7 +38,7 @@ final class TrackersViewController: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Трекеры"
+        label.text = NSLocalizedString("Trackers", comment: "Title for trackers section or tab")
         label.font = .systemFont(ofSize: 34, weight: .bold)
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +47,7 @@ final class TrackersViewController: UIViewController {
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Поиск"
+        searchBar.placeholder = NSLocalizedString("Search", comment: "Title for search functionality")
         searchBar.delegate = self
         searchBar.backgroundImage = UIImage()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -69,7 +69,7 @@ final class TrackersViewController: UIViewController {
 
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString("WhatToTrack", comment: "Prompt asking what to track")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypBlack
@@ -327,7 +327,7 @@ extension TrackersViewController {
     private func toggleTrackerCompletion(_ tracker: Tracker) {
         let currentDate = Date()
         if self.currentDate > currentDate {
-            let alert = UIAlertController(title: "Ошибка", message: "Нельзя отметить трекер на будущую дату", preferredStyle: .alert)
+            let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Generic error title"), message: NSLocalizedString("CannotMarkFutureDate", comment: "Error message when trying to mark a tracker for a future date"), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
             return

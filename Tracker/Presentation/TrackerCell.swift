@@ -116,7 +116,7 @@ final class TrackerCell: UICollectionViewCell {
     func configure(with tracker: Tracker, isCompleted: Bool, completedDays: Int) {
         emojiLabel.text = tracker.emoji
         nameLabel.text = tracker.name
-        daysCountLabel.text = "\(completedDays) \(pluralizeDays(completedDays))"
+        daysCountLabel.text = "\(pluralizeDays(completedDays))"
 
         cardView.backgroundColor = tracker.color
 
@@ -143,17 +143,7 @@ final class TrackerCell: UICollectionViewCell {
     // MARK: - Helpers
 
     private func pluralizeDays(_ count: Int) -> String {
-        let cases = ["день", "дня", "дней"]
-        let mod10 = count % 10
-        let mod100 = count % 100
-
-        switch (mod10, mod100) {
-        case (1, 11...14): return cases[2]
-        case (1, _): return cases[0]
-        case (2...4, 11...14): return cases[2]
-        case (2...4, _): return cases[1]
-        default: return cases[2]
-        }
+        return String.localizedStringWithFormat(NSLocalizedString("Days", comment: "Number of days"), count)
     }
 }
 

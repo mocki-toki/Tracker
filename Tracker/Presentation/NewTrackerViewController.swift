@@ -32,7 +32,7 @@ final class NewTrackerViewController: UIViewController {
     
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("EnterTrackName", comment: "Enter track name hint")
         textField.backgroundColor = .ypBackground
         textField.layer.cornerRadius = 16
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
@@ -55,7 +55,7 @@ final class NewTrackerViewController: UIViewController {
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("Cancel", comment: "Cancel button"), for: .normal)
         button.setTitleColor(.red, for: .normal)
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
@@ -67,7 +67,7 @@ final class NewTrackerViewController: UIViewController {
     
     private lazy var createButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("Create", comment: "Create button"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .ypBlack
         button.layer.cornerRadius = 16
@@ -137,9 +137,9 @@ final class NewTrackerViewController: UIViewController {
     private func configureForTrackerType() {
         switch trackerType {
         case .habit:
-            titleLabel.text = "Новая привычка"
+            titleLabel.text = NSLocalizedString("NewHabit", comment: "Title for creating a new habit")
         case .irregularEvent:
-            titleLabel.text = "Новое нерегулярное событие"
+            titleLabel.text = NSLocalizedString("NewIrregularEvent", comment: "Title for creating a new irregular event")
         }
     }
     
@@ -216,7 +216,7 @@ extension NewTrackerViewController: UITableViewDelegate, UITableViewDataSource {
                 
         if trackerType == .habit && indexPath.row == 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-            cell.textLabel?.text = "Расписание"
+            cell.textLabel?.text = NSLocalizedString("Schedule", comment: "Button for schedule section")
             if !selectedSchedule.isEmpty {
                 let weekdayStrings = selectedSchedule.map { $0.shortTitle }
                 cell.detailTextLabel?.text = weekdayStrings.joined(separator: ", ")
@@ -225,7 +225,7 @@ extension NewTrackerViewController: UITableViewDelegate, UITableViewDataSource {
             if(trackerType == .irregularEvent ) {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             }
-            cell.textLabel?.text = "Категория"
+            cell.textLabel?.text = NSLocalizedString("Category", comment: "Button for category selection")
             cell.detailTextLabel?.text = "Общее"
         }
         

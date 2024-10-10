@@ -20,6 +20,7 @@
 		C13E04C92C941ECF00B79C7C /* TrackerTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BE2C941ECF00B79C7C /* TrackerTypeSelectionViewController.swift */; };
 		C13E04CA2C941ECF00B79C7C /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BF2C941ECF00B79C7C /* Weekday.swift */; };
 		C13E04D02C941F0100B79C7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C13E04CE2C941F0100B79C7C /* Assets.xcassets */; };
+		C1CA54B82CB7DDAE0098090C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C1CA54B72CB7DDAE0098090C /* Localizable.xcstrings */; };
 		C1F409C02CB6B75300B2FF06 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C13E04CB2C941F0100B79C7C /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		C13E04BF2C941ECF00B79C7C /* Weekday.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
 		C13E04CB2C941F0100B79C7C /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C13E04CE2C941F0100B79C7C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C1CA54B72CB7DDAE0098090C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				C13CFD692C8E40F500E7800F /* AppDelegate.swift */,
 				C13CFD6B2C8E40F500E7800F /* SceneDelegate.swift */,
 				C13CFD772C8E40F700E7800F /* Info.plist */,
+				C1CA54B72CB7DDAE0098090C /* Localizable.xcstrings */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -149,6 +152,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = C13CFD5D2C8E40F500E7800F;
 			productRefGroup = C13CFD672C8E40F500E7800F /* Products */;
@@ -167,6 +171,7 @@
 			files = (
 				C13E04D02C941F0100B79C7C /* Assets.xcassets in Resources */,
 				C1F409C02CB6B75300B2FF06 /* LaunchScreen.storyboard in Resources */,
+				C1CA54B82CB7DDAE0098090C /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +259,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -310,6 +316,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
