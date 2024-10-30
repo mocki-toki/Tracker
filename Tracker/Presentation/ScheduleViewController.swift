@@ -18,7 +18,7 @@ private enum Constants {
     enum Sizes {
         static let cornerRadius: CGFloat = 16
         static let cellHeight: CGFloat = 75
-        static let buttonHeight: CGFloat = 50
+        static let buttonHeight: CGFloat = 60
     }
 
     enum Paddings {
