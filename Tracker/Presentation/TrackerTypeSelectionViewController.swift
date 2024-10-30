@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackerTypeSelectionViewController: UIViewController, UIConfigurable {
+final class TrackerTypeSelectionViewController: UIViewController {
     // MARK: - Constants
 
     private enum Constants {
@@ -92,8 +92,18 @@ final class TrackerTypeSelectionViewController: UIViewController, UIConfigurable
         setupConstraints()
     }
 
-    // MARK: - UI Setup
+    // MARK: - Actions
 
+    @objc private func habitButtonTapped() {
+        onTypeSelected?(.habit)
+    }
+
+    @objc private func irregularEventButtonTapped() {
+        onTypeSelected?(.irregularEvent)
+    }
+}
+
+extension TrackerTypeSelectionViewController: UIConfigurable {
     func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
@@ -114,15 +124,5 @@ final class TrackerTypeSelectionViewController: UIViewController, UIConfigurable
             habitButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
             irregularEventButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight)
         ])
-    }
-
-    // MARK: - Actions
-
-    @objc private func habitButtonTapped() {
-        onTypeSelected?(.habit)
-    }
-
-    @objc private func irregularEventButtonTapped() {
-        onTypeSelected?(.irregularEvent)
     }
 }

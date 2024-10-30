@@ -49,7 +49,7 @@ private enum Constants {
 
 // MARK: - ScheduleViewController
 
-final class ScheduleViewController: UIViewController, UIConfigurable {
+final class ScheduleViewController: UIViewController {
     // MARK: - Properties
 
     var selectedWeekdays: Set<Weekday> = []
@@ -96,8 +96,15 @@ final class ScheduleViewController: UIViewController, UIConfigurable {
         setupConstraints()
     }
 
-    // MARK: - UI Setup
+    // MARK: - Actions
 
+    @objc private func doneButtonTapped() {
+        onDone?(selectedWeekdays)
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ScheduleViewController: UIConfigurable {
     func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
@@ -119,13 +126,6 @@ final class ScheduleViewController: UIViewController, UIConfigurable {
             doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.buttonHorizontalPadding),
             doneButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight)
         ])
-    }
-
-    // MARK: - Actions
-
-    @objc private func doneButtonTapped() {
-        onDone?(selectedWeekdays)
-        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -179,10 +179,10 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - WeekdayCell
 
-final class WeekdayCell: UITableViewCell, UIConfigurable {
+final class WeekdayCell: UITableViewCell {
     // MARK: - UI Components
 
-    private let weekdayLabel: UILabel = {
+    private lazy var weekdayLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.Fonts.cellFont
         return label
@@ -211,8 +211,21 @@ final class WeekdayCell: UITableViewCell, UIConfigurable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - UI Setup
+    // MARK: - Configuration
 
+    func configure(with weekday: Weekday, isSelected: Bool) {
+        weekdayLabel.text = weekday.fullTitle
+        selectionSwitch.isOn = isSelected
+    }
+
+    // MARK: - Actions
+
+    @objc private func switchValueChanged() {
+        onSwitchValueChanged?(selectionSwitch.isOn)
+    }
+}
+
+extension WeekdayCell: UIConfigurable {
     func setupUI() {
         [weekdayLabel, selectionSwitch].forEach { contentView.addSubview($0) }
 
@@ -230,18 +243,5 @@ final class WeekdayCell: UITableViewCell, UIConfigurable {
             selectionSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Paddings.cellContentPadding),
             selectionSwitch.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-    }
-
-    // MARK: - Configuration
-
-    func configure(with weekday: Weekday, isSelected: Bool) {
-        weekdayLabel.text = weekday.fullTitle
-        selectionSwitch.isOn = isSelected
-    }
-
-    // MARK: - Actions
-
-    @objc private func switchValueChanged() {
-        onSwitchValueChanged?(selectionSwitch.isOn)
     }
 }

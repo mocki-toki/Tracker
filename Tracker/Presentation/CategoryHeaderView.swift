@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CategoryHeaderView: UICollectionReusableView, UIConfigurable {
+final class CategoryHeaderView: UICollectionReusableView {
     // MARK: - Constants
 
     private enum Constants {
@@ -18,7 +18,7 @@ final class CategoryHeaderView: UICollectionReusableView, UIConfigurable {
 
     // MARK: - UI Components
 
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.titleFont
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -44,9 +44,9 @@ final class CategoryHeaderView: UICollectionReusableView, UIConfigurable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Setup
-
+extension CategoryHeaderView: UIConfigurable {
     func setupUI() {
         addSubview(titleLabel)
     }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewTrackerViewController: UIViewController, UIConfigurable {
+final class NewTrackerViewController: UIViewController {
     // MARK: - Constants
     
     private enum Constants {
@@ -142,42 +142,6 @@ final class NewTrackerViewController: UIViewController, UIConfigurable {
 
     // MARK: - UI Setup
     
-    func setupUI() {
-        view.backgroundColor = Constants.Colors.background
-        
-        [titleLabel, nameTextField, tableView, cancelButton, createButton].forEach { view.addSubview($0) }
-        
-        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        updateCreateButtonState()
-    }
-    
-    func setupConstraints() {
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Paddings.titleTopPadding),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.Paddings.textFieldTopPadding),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
-            nameTextField.heightAnchor.constraint(equalToConstant: Constants.Sizes.textFieldHeight),
-            
-            tableView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: Constants.Paddings.tableViewTopPadding),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
-            tableView.heightAnchor.constraint(equalToConstant: trackerType == .habit ? Constants.Sizes.tableViewCellHeight * 2 : Constants.Sizes.tableViewCellHeight),
-            
-            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.Paddings.buttonBottomPadding),
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
-            cancelButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
-            cancelButton.widthAnchor.constraint(equalTo: createButton.widthAnchor),
-            
-            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.Paddings.buttonBottomPadding),
-            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
-            createButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
-            createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: Constants.Paddings.buttonSpacing)
-        ])
-    }
-    
     private func configureForTrackerType() {
         switch trackerType {
         case .habit:
@@ -231,6 +195,46 @@ final class NewTrackerViewController: UIViewController, UIConfigurable {
         createButton.isEnabled = isNameValid && isScheduleValid
         createButton.backgroundColor = Constants.Colors.createButtonBackground
         createButton.layer.opacity = createButton.isEnabled ? 1 : 0.5
+    }
+}
+
+// MARK: - UIConfigurable
+
+extension NewTrackerViewController: UIConfigurable {
+    func setupUI() {
+        view.backgroundColor = Constants.Colors.background
+        
+        [titleLabel, nameTextField, tableView, cancelButton, createButton].forEach { view.addSubview($0) }
+        
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        updateCreateButtonState()
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Paddings.titleTopPadding),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.Paddings.textFieldTopPadding),
+            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
+            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
+            nameTextField.heightAnchor.constraint(equalToConstant: Constants.Sizes.textFieldHeight),
+            
+            tableView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: Constants.Paddings.tableViewTopPadding),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
+            tableView.heightAnchor.constraint(equalToConstant: trackerType == .habit ? Constants.Sizes.tableViewCellHeight * 2 : Constants.Sizes.tableViewCellHeight),
+            
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.Paddings.buttonBottomPadding),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
+            cancelButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
+            cancelButton.widthAnchor.constraint(equalTo: createButton.widthAnchor),
+            
+            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.Paddings.buttonBottomPadding),
+            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Paddings.horizontalPadding),
+            createButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
+            createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: Constants.Paddings.buttonSpacing)
+        ])
     }
 }
 

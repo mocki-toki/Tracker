@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MainViewController: UIViewController, UIConfigurable {
+final class MainViewController: UIViewController {
     // MARK: - Constants
 
     private enum Constants {
@@ -77,26 +77,6 @@ final class MainViewController: UIViewController, UIConfigurable {
         switchToTab(at: 0)
     }
 
-    // MARK: - UI Setup
-
-    func setupUI() {
-        view.backgroundColor = Constants.Colors.background
-        [containerView, tabBar].forEach { view.addSubview($0) }
-    }
-
-    func setupConstraints() {
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
-
-            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.tabBarLeadingPadding),
-            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Layout.tabBarTrailingPadding),
-            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-    }
-
     // MARK: - Tab Switching
 
     private func switchToTab(at index: Int) {
@@ -121,6 +101,28 @@ final class MainViewController: UIViewController, UIConfigurable {
         case Constants.TabBar.statisticsTag: return statisticsViewController
         default: return nil
         }
+    }
+}
+
+// MARK: - UIConfigurable
+
+extension MainViewController: UIConfigurable {
+    func setupUI() {
+        view.backgroundColor = Constants.Colors.background
+        [containerView, tabBar].forEach { view.addSubview($0) }
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
+
+            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.tabBarLeadingPadding),
+            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Layout.tabBarTrailingPadding),
+            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 }
 

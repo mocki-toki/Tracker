@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackerCell: UICollectionViewCell, UIConfigurable {
+final class TrackerCell: UICollectionViewCell {
     // MARK: - Constants
 
     private enum Constants {
@@ -52,7 +52,7 @@ final class TrackerCell: UICollectionViewCell, UIConfigurable {
 
     // MARK: - UI Components
 
-    private let cardView: UIView = {
+    private lazy var cardView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = Constants.Sizes.cornerRadius
         view.clipsToBounds = true
@@ -60,7 +60,7 @@ final class TrackerCell: UICollectionViewCell, UIConfigurable {
         return view
     }()
 
-    private let emojiLabel: UILabel = {
+    private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.Fonts.emojiFont
         label.textAlignment = .center
@@ -71,7 +71,7 @@ final class TrackerCell: UICollectionViewCell, UIConfigurable {
         return label
     }()
 
-    private let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.Fonts.nameFont
         label.textColor = Constants.Colors.nameText
@@ -80,7 +80,7 @@ final class TrackerCell: UICollectionViewCell, UIConfigurable {
         return label
     }()
 
-    private let daysCountLabel: UILabel = {
+    private lazy var daysCountLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.Fonts.daysCountFont
         label.textColor = Constants.Colors.daysCountText
@@ -113,41 +113,6 @@ final class TrackerCell: UICollectionViewCell, UIConfigurable {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Setup
-
-    func setupUI() {
-        [cardView, daysCountLabel, plusButton].forEach { contentView.addSubview($0) }
-        [emojiLabel, nameLabel].forEach { cardView.addSubview($0) }
-    }
-
-    func setupConstraints() {
-        NSLayoutConstraint.activate([
-            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cardView.heightAnchor.constraint(equalToConstant: Constants.Sizes.cardViewHeight),
-
-            emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: Constants.Paddings.cardViewPadding),
-            emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
-            emojiLabel.widthAnchor.constraint(equalToConstant: Constants.Sizes.emojiLabelSize),
-            emojiLabel.heightAnchor.constraint(equalToConstant: Constants.Sizes.emojiLabelSize),
-
-            nameLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: Constants.Paddings.nameLabelTopPadding),
-            nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
-            nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.Paddings.cardViewPadding),
-            nameLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -Constants.Paddings.cardViewPadding),
-
-            daysCountLabel.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: Constants.Paddings.daysCountTopPadding),
-            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
-            daysCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.Paddings.daysCountBottomPadding),
-
-            plusButton.centerYAnchor.constraint(equalTo: daysCountLabel.centerYAnchor),
-            plusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Paddings.cardViewPadding),
-            plusButton.widthAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize),
-            plusButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize)
-        ])
     }
 
     // MARK: - Configuration
@@ -183,5 +148,40 @@ final class TrackerCell: UICollectionViewCell, UIConfigurable {
 
     private func pluralizeDays(_ count: Int) -> String {
         return String.localizedStringWithFormat(NSLocalizedString("Days", comment: "Number of days"), count)
+    }
+}
+
+extension TrackerCell: UIConfigurable {
+    func setupUI() {
+        [cardView, daysCountLabel, plusButton].forEach { contentView.addSubview($0) }
+        [emojiLabel, nameLabel].forEach { cardView.addSubview($0) }
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cardView.heightAnchor.constraint(equalToConstant: Constants.Sizes.cardViewHeight),
+
+            emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: Constants.Paddings.cardViewPadding),
+            emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
+            emojiLabel.widthAnchor.constraint(equalToConstant: Constants.Sizes.emojiLabelSize),
+            emojiLabel.heightAnchor.constraint(equalToConstant: Constants.Sizes.emojiLabelSize),
+
+            nameLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: Constants.Paddings.nameLabelTopPadding),
+            nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
+            nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.Paddings.cardViewPadding),
+            nameLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -Constants.Paddings.cardViewPadding),
+
+            daysCountLabel.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: Constants.Paddings.daysCountTopPadding),
+            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Paddings.cardViewPadding),
+            daysCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.Paddings.daysCountBottomPadding),
+
+            plusButton.centerYAnchor.constraint(equalTo: daysCountLabel.centerYAnchor),
+            plusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Paddings.cardViewPadding),
+            plusButton.widthAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize),
+            plusButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize)
+        ])
     }
 }

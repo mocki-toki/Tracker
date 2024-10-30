@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackersViewController: UIViewController, UIConfigurable {
+final class TrackersViewController: UIViewController {
     // MARK: - Constants
 
     private enum Constants {
@@ -146,50 +146,6 @@ final class TrackersViewController: UIViewController, UIConfigurable {
         filterTrackers()
     }
 
-    // MARK: - UI Setup
-
-    func setupUI() {
-        view.backgroundColor = Constants.Colors.background
-
-        [addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView].forEach { view.addSubview($0) }
-
-        [placeholderImageView, placeholderLabel].forEach { placeholderView.addSubview($0) }
-    }
-
-    func setupConstraints() {
-        NSLayoutConstraint.activate([
-            addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Sizes.addButtonTopPadding),
-            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.addButtonLeadingPadding),
-
-            datePicker.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Sizes.datePickerTopPadding),
-            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Sizes.datePickerTrailingPadding),
-
-            titleLabel.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: Constants.Sizes.titleTopPadding),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.titleLeadingPadding),
-
-            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.Sizes.searchBarTopPadding),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.searchBarHorizontalPadding),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Sizes.searchBarHorizontalPadding),
-
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: Constants.Sizes.collectionViewTopPadding),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-
-            placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-
-            placeholderImageView.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor),
-            placeholderImageView.topAnchor.constraint(equalTo: placeholderView.topAnchor),
-            placeholderImageView.widthAnchor.constraint(equalToConstant: Constants.Sizes.placeholderImageSize),
-            placeholderImageView.heightAnchor.constraint(equalToConstant: Constants.Sizes.placeholderImageSize),
-
-            placeholderLabel.topAnchor.constraint(equalTo: placeholderImageView.bottomAnchor, constant: Constants.Sizes.placeholderLabelTopPadding),
-            placeholderLabel.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor),
-            placeholderLabel.bottomAnchor.constraint(equalTo: placeholderView.bottomAnchor)
-        ])
-    }
-
     // MARK: - Data Management
 
     private func loadData() {
@@ -279,6 +235,50 @@ final class TrackersViewController: UIViewController, UIConfigurable {
     @objc private func dateChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         filterTrackers()
+    }
+}
+
+extension TrackersViewController: UIConfigurable {
+    func setupUI() {
+        view.backgroundColor = Constants.Colors.background
+
+        [addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView].forEach { view.addSubview($0) }
+
+        [placeholderImageView, placeholderLabel].forEach { placeholderView.addSubview($0) }
+    }
+
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Sizes.addButtonTopPadding),
+            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.addButtonLeadingPadding),
+
+            datePicker.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Sizes.datePickerTopPadding),
+            datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Sizes.datePickerTrailingPadding),
+
+            titleLabel.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: Constants.Sizes.titleTopPadding),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.titleLeadingPadding),
+
+            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.Sizes.searchBarTopPadding),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Sizes.searchBarHorizontalPadding),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Sizes.searchBarHorizontalPadding),
+
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: Constants.Sizes.collectionViewTopPadding),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
+            placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
+            placeholderImageView.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor),
+            placeholderImageView.topAnchor.constraint(equalTo: placeholderView.topAnchor),
+            placeholderImageView.widthAnchor.constraint(equalToConstant: Constants.Sizes.placeholderImageSize),
+            placeholderImageView.heightAnchor.constraint(equalToConstant: Constants.Sizes.placeholderImageSize),
+
+            placeholderLabel.topAnchor.constraint(equalTo: placeholderImageView.bottomAnchor, constant: Constants.Sizes.placeholderLabelTopPadding),
+            placeholderLabel.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor),
+            placeholderLabel.bottomAnchor.constraint(equalTo: placeholderView.bottomAnchor)
+        ])
     }
 }
 
