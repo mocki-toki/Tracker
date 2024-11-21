@@ -52,6 +52,17 @@
         }
       }
     },
+    "Color" : {
+      "comment" : "Subtitle for color selection",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цвет"
+          }
+        }
+      }
+    },
     "Create" : {
       "comment" : "Create button",
       "localizations" : {
@@ -157,6 +168,17 @@
         }
       }
     },
+    "Emoji" : {
+      "comment" : "Subtitle for emoji selection",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emoji"
+          }
+        }
+      }
+    },
     "EnterTrackName" : {
       "comment" : "Enter track name hint",
       "localizations" : {
@@ -193,7 +215,7 @@
     },
     "Fri" : {
       "comment" : "Short name for Friday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -211,7 +233,7 @@
     },
     "Friday" : {
       "comment" : "Full name for Friday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -263,7 +285,7 @@
     },
     "Mon" : {
       "comment" : "Short name for Monday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -281,7 +303,7 @@
     },
     "Monday" : {
       "comment" : "Full name for Monday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -333,7 +355,7 @@
     },
     "Sat" : {
       "comment" : "Short name for Saturday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -351,7 +373,7 @@
     },
     "Saturday" : {
       "comment" : "Full name for Saturday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -420,7 +442,7 @@
     },
     "Sun" : {
       "comment" : "Short name for Sunday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -438,7 +460,7 @@
     },
     "Sunday" : {
       "comment" : "Full name for Sunday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -456,7 +478,7 @@
     },
     "Thu" : {
       "comment" : "Short name for Thursday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -474,7 +496,7 @@
     },
     "Thursday" : {
       "comment" : "Full name for Thursday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -509,7 +531,7 @@
     },
     "Tue" : {
       "comment" : "Short name for Tuesday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -527,7 +549,7 @@
     },
     "Tuesday" : {
       "comment" : "Full name for Tuesday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -545,7 +567,7 @@
     },
     "Wed" : {
       "comment" : "Short name for Wednesday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -563,7 +585,7 @@
     },
     "Wednesday" : {
       "comment" : "Full name for Wednesday",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
