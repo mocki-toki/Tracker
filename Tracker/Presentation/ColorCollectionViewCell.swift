@@ -36,8 +36,8 @@ final class ColorCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with color: UIColor) {
-        colorImageView.backgroundColor = color
+    func configure(with colorName: String) {
+        colorImageView.backgroundColor = UIColor(named: colorName)
     }
 
     func configureSelection(isSelected: Bool) {

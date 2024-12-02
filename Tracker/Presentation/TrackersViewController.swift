@@ -60,11 +60,24 @@ final class TrackersViewController: UIViewController {
 
     // MARK: - Properties
 
+    private let dataProvider: DataProvider
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = .init()
     private var searchText: String = ""
+
+    // MARK: - Initialization
+
+    init() {
+        self.dataProvider = DataProvider()
+        super.init(nibName: nil, bundle: nil)
+        self.dataProvider.delegate = self
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - UI Components
 
@@ -150,35 +163,16 @@ final class TrackersViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
-        loadData()
+        loadTrackers()
         filterTrackers()
     }
 
     // MARK: - Data Management
 
-    private func loadData() {
-        categories = [
-            TrackerCategory(
-                title: "Здоровье",
-                trackers: [
-                    Tracker(
-                        id: UUID(),
-                        name: "Медитация", emoji: "🧘‍♂️", color: .systemBlue,
-                        schedule: Set(Weekday.allCases)),
-                    Tracker(
-                        id: UUID(),
-                        name: "Пробежка", emoji: "🏃‍♂️", color: .systemGreen,
-                        schedule: [.monday, .wednesday, .friday]),
-                ]),
-            TrackerCategory(
-                title: "Развитие",
-                trackers: [
-                    Tracker(
-                        id: UUID(),
-                        name: "Чтение", emoji: "📚", color: .systemPurple,
-                        schedule: Set(Weekday.allCases)),
-                ]),
-        ]
+    private func loadTrackers() {
+        categories = dataProvider.getAllTrackersWithCategories()
+        completedTrackers = dataProvider.getAllRecords()
+        filterTrackers()
     }
 
     private func filterTrackers() {
@@ -191,11 +185,16 @@ final class TrackersViewController: UIViewController {
                 let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true
                 let matchesSearch =
                     searchText.isEmpty
-                        || tracker.name.lowercased().contains(searchText.lowercased())
+                    || tracker.name.lowercased().contains(searchText.lowercased())
                 return matchesSchedule && matchesSearch
             }
             return filteredTrackers.isEmpty
-                ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
+                ? nil
+                : TrackerCategory(
+                    id: UUID(),
+                    name: category.name,
+                    trackers: filteredTrackers
+                )
         }
 
         updatePlaceholderVisibility()
@@ -230,18 +229,7 @@ final class TrackersViewController: UIViewController {
     }
 
     private func addNewTracker(_ tracker: Tracker) {
-        let categoryName = Constants.Texts.generalCategory
-        if let index = categories.firstIndex(where: { $0.title == categoryName }) {
-            let existingCategory = categories[index]
-            let updatedTrackers = existingCategory.trackers + [tracker]
-            let updatedCategory = TrackerCategory(title: categoryName, trackers: updatedTrackers)
-            categories[index] = updatedCategory
-        } else {
-            let newCategory = TrackerCategory(title: categoryName, trackers: [tracker])
-            categories.append(newCategory)
-        }
-
-        filterTrackers()
+        dataProvider.addTracker(tracker, categoryName: Constants.Texts.generalCategory)
     }
 
     @objc private func dateChanged(_ sender: UIDatePicker) {
@@ -250,11 +238,24 @@ final class TrackersViewController: UIViewController {
     }
 }
 
+// MARK: - DataProviderDelegate
+
+extension TrackersViewController: DataProviderDelegate {
+    func dataDidChange() {
+        DispatchQueue.main.async { [weak self] in
+            self?.loadTrackers()
+        }
+    }
+}
+
+// MARK: - UIConfigurable
+
 extension TrackersViewController: UIConfigurable {
     func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
-        for item in [addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView] {
+        for item in [addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView]
+        {
             view.addSubview(item)
         }
 
@@ -354,7 +355,9 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
 
         cell.onPlusButtonTap = { [weak self] in
             self?.toggleTrackerCompletion(tracker)
-            collectionView.reloadItems(at: [indexPath])
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadItems(at: [indexPath])
+            }
         }
 
         return cell
@@ -365,14 +368,14 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
-              let headerView = collectionView.dequeueReusableSupplementaryView(
-                  ofKind: kind, withReuseIdentifier: "CategoryHeader", for: indexPath)
-              as? CategoryHeaderView
+            let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind, withReuseIdentifier: "CategoryHeader", for: indexPath)
+                as? CategoryHeaderView
         else {
             return UICollectionReusableView()
         }
 
-        headerView.text = visibleCategories[indexPath.section].title
+        headerView.text = visibleCategories[indexPath.section].name
         return headerView
     }
 
@@ -422,12 +425,13 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
 extension TrackersViewController {
     private func isTrackerCompleted(_ tracker: Tracker) -> Bool {
         return completedTrackers.contains {
-            $0.trackerId == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: currentDate)
+            $0.tracker.id == tracker.id
+                && Calendar.current.isDate($0.date, inSameDayAs: currentDate)
         }
     }
 
     private func completedDays(for tracker: Tracker) -> Int {
-        return completedTrackers.filter { $0.trackerId == tracker.id }.count
+        return completedTrackers.filter { $0.tracker.id == tracker.id }.count
     }
 
     private func toggleTrackerCompletion(_ tracker: Tracker) {
@@ -440,14 +444,6 @@ extension TrackersViewController {
             return
         }
 
-        if let index = completedTrackers.firstIndex(where: {
-            $0.trackerId == tracker.id
-                && Calendar.current.isDate($0.date, inSameDayAs: self.currentDate)
-        }) {
-            completedTrackers.remove(at: index)
-        } else {
-            let newRecord = TrackerRecord(trackerId: tracker.id, date: currentDate)
-            completedTrackers.append(newRecord)
-        }
+        dataProvider.switchTrackerRecord(for: tracker, on: currentDate)
     }
 }

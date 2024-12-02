@@ -73,8 +73,8 @@ final class NewTrackerViewController: UIViewController {
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
         "🥦", "🏓", "🥇", "🎸", "🏝️", "😪",
     ]
-    private let colors: [UIColor] = Array(1...18).map {
-        UIColor(named: "YP Palette \($0)") ?? UIColor()
+    private let colorNames: [String] = Array(1...18).map {
+        "YP Palette \($0)"
     }
 
     private lazy var selectedEmoji: String = self.emojis.first! {
@@ -83,7 +83,7 @@ final class NewTrackerViewController: UIViewController {
         }
     }
 
-    private lazy var selectedColor: UIColor = self.colors.first! {
+    private lazy var selectedColorName: String = self.colorNames.first! {
         didSet {
             updateCreateButtonState()
         }
@@ -243,7 +243,7 @@ final class NewTrackerViewController: UIViewController {
             id: UUID(),
             name: name,
             emoji: selectedEmoji,
-            color: selectedColor,
+            colorName: selectedColorName,
             schedule: trackerType == .habit ? selectedSchedule : nil
         )
 
@@ -452,7 +452,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int)
         -> Int
-    { section == 0 ? emojis.count : colors.count }
+    { section == 0 ? emojis.count : colorNames.count }
 
     func collectionView(
         _ collectionView: UICollectionView,
@@ -499,9 +499,9 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             else {
                 return UICollectionViewCell()
             }
-            let color = colors[indexPath.row]
-            cell.configure(with: color)
-            cell.configureSelection(isSelected: selectedColor == color)
+            let colorName = colorNames[indexPath.row]
+            cell.configure(with: colorName)
+            cell.configureSelection(isSelected: selectedColorName == colorName)
             return cell
         }
     }
@@ -519,7 +519,7 @@ extension NewTrackerViewController: UICollectionViewDelegate {
                 previousSelectedIndexPath = nil
             }
         } else {
-            if let previousColor = colors.firstIndex(of: selectedColor) {
+            if let previousColor = colorNames.firstIndex(of: selectedColorName) {
                 previousSelectedIndexPath = IndexPath(row: previousColor, section: 1)
             } else {
                 previousSelectedIndexPath = nil
@@ -529,7 +529,7 @@ extension NewTrackerViewController: UICollectionViewDelegate {
         if indexPath.section == 0 {
             selectedEmoji = emojis[indexPath.row]
         } else {
-            selectedColor = colors[indexPath.row]
+            selectedColorName = colorNames[indexPath.row]
         }
 
         var indexPathsToReload: [IndexPath] = [indexPath]
