@@ -38,7 +38,6 @@ private enum Constants {
         static let cellBackground = UIColor.ypBackground
         static let cellText = UIColor.black
         static let cellDetailText = UIColor.ypGray
-        static let switchTint = UIColor.systemBlue
     }
 
     enum Fonts {
@@ -70,7 +69,7 @@ final class ScheduleViewController: UIViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(WeekdayCell.self, forCellReuseIdentifier: "WeekdayCell")
+        tableView.register(WeekdayTableCell.self, forCellReuseIdentifier: WeekdayTableCell.identifier)
         tableView.layer.cornerRadius = Constants.Sizes.cornerRadius
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Constants.Paddings.cellContentPadding, bottom: 0, right: Constants.Paddings.cellContentPadding)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -137,7 +136,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WeekdayCell", for: indexPath) as! WeekdayCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: WeekdayTableCell.identifier, for: indexPath) as! WeekdayTableCell
 
         cell.backgroundColor = Constants.Colors.cellBackground
         cell.textLabel?.font = Constants.Fonts.cellFont
@@ -163,7 +162,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let cell = tableView.cellForRow(at: indexPath) as? WeekdayCell else { return }
+        guard let cell = tableView.cellForRow(at: indexPath) as? WeekdayTableCell else { return }
         cell.selectionSwitch.setOn(!cell.selectionSwitch.isOn, animated: true)
         cell.selectionSwitch.sendActions(for: .valueChanged)
     }
@@ -174,74 +173,5 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Constants.Sizes.cellHeight
-    }
-}
-
-// MARK: - WeekdayCell
-
-final class WeekdayCell: UITableViewCell {
-    // MARK: - UI Components
-
-    private lazy var weekdayLabel: UILabel = {
-        let label = UILabel()
-        label.font = Constants.Fonts.cellFont
-        return label
-    }()
-
-    let selectionSwitch: UISwitch = {
-        let switchControl = UISwitch()
-        switchControl.onTintColor = Constants.Colors.switchTint
-        return switchControl
-    }()
-
-    // MARK: - Properties
-
-    var onSwitchValueChanged: ((Bool) -> Void)?
-
-    // MARK: - Initialization
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupUI()
-        setupConstraints()
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Configuration
-
-    func configure(with weekday: Weekday, isSelected: Bool) {
-        weekdayLabel.text = weekday.fullTitle
-        selectionSwitch.isOn = isSelected
-    }
-
-    // MARK: - Actions
-
-    @objc private func switchValueChanged() {
-        onSwitchValueChanged?(selectionSwitch.isOn)
-    }
-}
-
-extension WeekdayCell: UIConfigurable {
-    func setupUI() {
-        [weekdayLabel, selectionSwitch].forEach { contentView.addSubview($0) }
-
-        weekdayLabel.translatesAutoresizingMaskIntoConstraints = false
-        selectionSwitch.translatesAutoresizingMaskIntoConstraints = false
-
-        selectionSwitch.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-    }
-
-    func setupConstraints() {
-        NSLayoutConstraint.activate([
-            weekdayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.Paddings.cellContentPadding),
-            weekdayLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-
-            selectionSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.Paddings.cellContentPadding),
-            selectionSwitch.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        ])
     }
 }

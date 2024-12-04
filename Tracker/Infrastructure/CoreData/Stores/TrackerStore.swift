@@ -60,7 +60,7 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate {
     @discardableResult
     func addTracker(
         name: String, emoji: String, colorName: String, schedule: Set<Weekday>?,
-        category: TrackerCategoryCoreData
+        category: TrackerCategory
     ) -> TrackerCoreData {
         let tracker = TrackerCoreData(context: context)
         tracker.id = UUID()
@@ -68,7 +68,7 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate {
         tracker.emoji = emoji
         tracker.colorName = colorName
         tracker.schedule = schedule?.map { "\($0.rawValue)" }.joined(separator: ",")
-        tracker.category = category
+        tracker.category = TrackerCategoryCoreData(data: category, context: context)
         saveContext()
         return tracker
     }

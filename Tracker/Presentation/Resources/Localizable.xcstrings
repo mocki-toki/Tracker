@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "AddCategory" : {
+      "comment" : "Button title for adding category",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Category"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить категорию"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "comment" : "Cancel button",
       "localizations" : {
@@ -35,8 +52,25 @@
         }
       }
     },
+    "CategoriesIsEmptyPlaceholder" : {
+      "comment" : "Placeholder text for empty category list",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Habits and events can be combined in meaning"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Привычки и события можно  объединить по смыслу"
+          }
+        }
+      }
+    },
     "Category" : {
-      "comment" : "Button for category selection",
+      "comment" : "Button for category selection\nTitle for category section",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -55,6 +89,12 @@
     "Color" : {
       "comment" : "Subtitle for color selection",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -76,6 +116,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Создать"
+          }
+        }
+      }
+    },
+    "CreateCategory" : {
+      "comment" : "Title for creating category",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Category"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новая категория"
           }
         }
       }
@@ -168,13 +225,53 @@
         }
       }
     },
+    "EditCategory" : {
+      "comment" : "Title for editing category",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Category"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Редактирование категории"
+          }
+        }
+      }
+    },
     "Emoji" : {
       "comment" : "Subtitle for emoji selection",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emoji"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Emoji"
+          }
+        }
+      }
+    },
+    "EnterCategoryName" : {
+      "comment" : "Enter category name hint",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter category name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название категории"
           }
         }
       }

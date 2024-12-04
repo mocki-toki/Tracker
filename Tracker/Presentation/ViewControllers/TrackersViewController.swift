@@ -23,7 +23,6 @@ final class TrackersViewController: UIViewController {
                 "CannotMarkFutureDate",
                 comment: "Error message when trying to mark a tracker for a future date")
             static let ok = "OK"
-            static let generalCategory = "Общее"
         }
 
         enum Fonts {
@@ -148,7 +147,7 @@ final class TrackersViewController: UIViewController {
         collectionView.backgroundColor = Constants.Colors.background
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
+        collectionView.register(TrackersViewCell.self, forCellWithReuseIdentifier: "TrackerCell")
         collectionView.register(
             CategoryHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -218,8 +217,8 @@ final class TrackersViewController: UIViewController {
 
     private func presentNewTrackerViewController(for type: TrackerType) {
         let newTrackerVC = NewTrackerViewController(type: type)
-        newTrackerVC.onTrackerCreated = { [weak self] newTracker in
-            self?.addNewTracker(newTracker)
+        newTrackerVC.onTrackerCreated = { [weak self] newTracker, selectedCategory in
+            self?.addNewTracker(newTracker, category: selectedCategory)
         }
         newTrackerVC.modalPresentationStyle = .pageSheet
 
@@ -228,8 +227,8 @@ final class TrackersViewController: UIViewController {
         }
     }
 
-    private func addNewTracker(_ tracker: Tracker) {
-        dataProvider.addTracker(tracker, categoryName: Constants.Texts.generalCategory)
+    private func addNewTracker(_ tracker: Tracker, category selectedCategory: TrackerCategory) {
+        dataProvider.addTracker(tracker, category: selectedCategory)
     }
 
     @objc private func dateChanged(_ sender: UIDatePicker) {
@@ -342,7 +341,7 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     {
         guard
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell
+                withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackersViewCell
         else {
             return UICollectionViewCell()
         }

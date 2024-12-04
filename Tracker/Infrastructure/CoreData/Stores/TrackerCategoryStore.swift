@@ -11,7 +11,7 @@ protocol TrackerCategoryStoreDelegate: AnyObject {
     func categoriesDidChange()
 }
 
-final class TrackerCategoryStore: NSObject, NSFetchedResultsControllerDelegate {
+final class TrackerCategoryStore: NSObject {
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
 
@@ -43,13 +43,6 @@ final class TrackerCategoryStore: NSObject, NSFetchedResultsControllerDelegate {
         }
     }
 
-    // MARK: - NSFetchedResultsControllerDelegate
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
-    {
-        delegate?.categoriesDidChange()
-    }
-
     func getAllCategories() -> [TrackerCategoryCoreData] {
         fetchedResultsController.fetchedObjects ?? []
     }
@@ -76,5 +69,12 @@ final class TrackerCategoryStore: NSObject, NSFetchedResultsControllerDelegate {
                 print("Error saving context: \(error)")
             }
         }
+    }
+}
+
+extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
+    {
+        delegate?.categoriesDidChange()
     }
 }
