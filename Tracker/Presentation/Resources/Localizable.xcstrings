@@ -58,13 +58,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Habits and events can be combined in meaning"
+            "value" : "Habits and events can be\ncombined in meaning"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Привычки и события можно  объединить по смыслу"
+            "state" : "needs_review",
+            "value" : "Привычки и события можно\nобъединить по смыслу"
           }
         }
       }

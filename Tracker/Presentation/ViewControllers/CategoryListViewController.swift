@@ -89,6 +89,7 @@ final class CategoryListViewController: UIViewController {
         let label = UILabel()
         label.text = Constants.Texts.cagegoriesIsEmptyPlaceholder
         label.textAlignment = .center
+        label.numberOfLines = 2
         label.font = Constants.Fonts.placeholderFont
         label.textColor = Constants.Colors.placeholderText
         label.adjustsFontForContentSizeCategory = true
