@@ -12,8 +12,10 @@ final class MainViewController: UIViewController {
 
     private enum Constants {
         enum TabBar {
-            static let trackersTitle = NSLocalizedString("Trackers", comment: "Trackers tab bar item")
-            static let statisticsTitle = NSLocalizedString("Statistics", comment: "Statistics tab bar item")
+            static let trackersTitle = NSLocalizedString(
+                "Trackers", comment: "Trackers tab bar item")
+            static let statisticsTitle = NSLocalizedString(
+                "Statistics", comment: "Statistics tab bar item")
             static let trackersTag = 0
             static let statisticsTag = 1
         }
@@ -36,8 +38,12 @@ final class MainViewController: UIViewController {
         let tabBar = UITabBar()
         tabBar.tintColor = Constants.Colors.tabBarTint
         tabBar.items = [
-            UITabBarItem(title: Constants.TabBar.trackersTitle, image: .ypTrackers, tag: Constants.TabBar.trackersTag),
-            UITabBarItem(title: Constants.TabBar.statisticsTitle, image: .ypStatistics, tag: Constants.TabBar.statisticsTag)
+            UITabBarItem(
+                title: Constants.TabBar.trackersTitle, image: .ypTrackers,
+                tag: Constants.TabBar.trackersTag),
+            UITabBarItem(
+                title: Constants.TabBar.statisticsTitle, image: .ypStatistics,
+                tag: Constants.TabBar.statisticsTag),
         ]
         tabBar.selectedItem = tabBar.items?.first
         tabBar.delegate = self
@@ -63,7 +69,7 @@ final class MainViewController: UIViewController {
         viewController.view.addSubview(label)
         NSLayoutConstraint.activate([
             label.centerXAnchor.constraint(equalTo: viewController.view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: viewController.view.centerYAnchor)
+            label.centerYAnchor.constraint(equalTo: viewController.view.centerYAnchor),
         ])
         return viewController
     }()
@@ -119,9 +125,11 @@ extension MainViewController: UIConfigurable {
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
 
-            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.tabBarLeadingPadding),
-            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Layout.tabBarTrailingPadding),
-            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            tabBar.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor, constant: Constants.Layout.tabBarLeadingPadding),
+            tabBar.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor, constant: -Constants.Layout.tabBarTrailingPadding),
+            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
 }
