@@ -39,9 +39,13 @@ final class DataProvider {
     }
 
     func addTracker(_ tracker: Tracker, category: TrackerCategory) {
-            trackerStore.addTracker(
-                name: tracker.name, emoji: tracker.emoji, colorName: tracker.colorName,
-                schedule: tracker.schedule, category: category)
+        let categoryCoreData =
+            trackerCategoryStore.getCategory(byName: category.name)
+            ?? trackerCategoryStore.addCategory(name: category.name)
+
+        trackerStore.addTracker(
+            name: tracker.name, emoji: tracker.emoji, colorName: tracker.colorName,
+            schedule: tracker.schedule, categoryData: categoryCoreData)
     }
 
     func switchTrackerRecord(for tracker: Tracker, on date: Date) {
@@ -54,13 +58,14 @@ final class DataProvider {
             trackerRecordStore.addRecord(trackerCoreData: trackerCoreData, date: date)
         }
     }
-    
+
     func addCategory(name categoryName: String) {
         trackerCategoryStore.addCategory(name: categoryName)
     }
-    
+
     func deleteCategory(_ category: TrackerCategory) {
-        trackerCategoryStore.deleteCategory(TrackerCategoryCoreData(data: category, context: context))
+        trackerCategoryStore.deleteCategory(
+            TrackerCategoryCoreData(data: category, context: context))
     }
 }
 

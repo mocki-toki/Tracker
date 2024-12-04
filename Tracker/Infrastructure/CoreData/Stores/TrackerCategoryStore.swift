@@ -49,11 +49,28 @@ final class TrackerCategoryStore: NSObject {
 
     @discardableResult
     func addCategory(name: String) -> TrackerCategoryCoreData {
+        if let existingCategory = getCategory(byName: name) {
+            return existingCategory
+        }
         let category = TrackerCategoryCoreData(context: context)
         category.id = UUID()
         category.name = name
         saveContext()
         return category
+    }
+
+    func getCategory(byName name: String) -> TrackerCategoryCoreData? {
+        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> =
+            TrackerCategoryCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+        fetchRequest.fetchLimit = 1
+        do {
+            let categories = try context.fetch(fetchRequest)
+            return categories.first
+        } catch {
+            print("Error fetching category by name: \(error)")
+            return nil
+        }
     }
 
     func deleteCategory(_ category: TrackerCategoryCoreData) {
