@@ -104,6 +104,8 @@ final class OnboardingViewController: UIPageViewController {
     // MARK: - Actions
 
     @objc private func skipOnboarding() {
+        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+
         guard let scene = view.window?.windowScene,
             let sceneDelegate = scene.delegate as? SceneDelegate,
             let window = sceneDelegate.window
