@@ -235,6 +235,25 @@ final class TrackersViewController: UIViewController {
         currentDate = sender.date
         filterTrackers()
     }
+
+    private func presentDeleteAlert(for tracker: Tracker) {
+        let alert = UIAlertController(
+            title: nil,
+            message: "Уверены, что хотите удалить трекер?",
+            preferredStyle: .actionSheet
+        )
+
+        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            self?.dataProvider.deleteTracker(tracker)
+        }
+
+        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
+
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: - DataProviderDelegate
@@ -359,6 +378,13 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
             }
         }
 
+        cell.onMenuAction = { [weak self] action in
+            switch action {
+            case .delete:
+                self?.presentDeleteAlert(for: tracker)
+            }
+        }
+
         return cell
     }
 
@@ -416,6 +442,10 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
         return Constants.Sizes.lineSpacing
+    }
+
+    private func deleteTracker(_ tracker: Tracker, at indexPath: IndexPath) {
+        dataProvider.deleteTracker(tracker)
     }
 }
 

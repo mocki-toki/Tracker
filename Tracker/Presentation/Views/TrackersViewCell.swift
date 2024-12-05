@@ -49,6 +49,11 @@ final class TrackersViewCell: UICollectionViewCell {
     static let reuseIdentifier = Constants.reuseIdentifier
 
     var onPlusButtonTap: (() -> Void)?
+    var onMenuAction: ((_ action: MenuAction) -> Void)?
+
+    enum MenuAction {
+        case delete
+    }
 
     // MARK: - UI Components
 
@@ -57,6 +62,7 @@ final class TrackersViewCell: UICollectionViewCell {
         view.layer.cornerRadius = Constants.Sizes.cornerRadius
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = true
         return view
     }()
 
@@ -108,6 +114,7 @@ final class TrackersViewCell: UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
         setupConstraints()
+        setupContextMenu()
     }
 
     @available(*, unavailable)
@@ -143,6 +150,13 @@ final class TrackersViewCell: UICollectionViewCell {
 
     @objc private func plusButtonTapped() {
         onPlusButtonTap?()
+    }
+
+    // MARK: - Context Menu
+
+    private func setupContextMenu() {
+        let interaction = UIContextMenuInteraction(delegate: self)
+        cardView.addInteraction(interaction)
     }
 
     // MARK: - Helpers
@@ -196,5 +210,23 @@ extension TrackersViewCell: UIConfigurable {
             plusButton.widthAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize),
             plusButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize),
         ])
+    }
+}
+
+// MARK: - UIContextMenuInteractionDelegate
+
+extension TrackersViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) {
+                [weak self] _ in
+                self?.onMenuAction?(.delete)
+            }
+
+            return UIMenu(children: [deleteAction])
+        }
     }
 }

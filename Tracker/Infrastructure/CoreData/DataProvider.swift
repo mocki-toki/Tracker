@@ -67,6 +67,11 @@ final class DataProvider {
         trackerCategoryStore.deleteCategory(
             TrackerCategoryCoreData(data: category, context: context))
     }
+
+    func deleteTracker(_ tracker: Tracker) {
+        guard let trackerCoreData = trackerStore.getTracker(by: tracker.id) else { return }
+        trackerStore.deleteTracker(trackerCoreData)
+    }
 }
 
 // MARK: - TrackerCategoryStoreDelegate
