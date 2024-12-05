@@ -60,19 +60,7 @@ final class MainViewController: UIViewController {
     // MARK: - View Controllers
 
     private lazy var trackersViewController = TrackersViewController()
-    private lazy var statisticsViewController: UIViewController = {
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = Constants.Colors.statisticsBackground
-        let label = UILabel()
-        label.text = Constants.TabBar.statisticsTitle
-        label.translatesAutoresizingMaskIntoConstraints = false
-        viewController.view.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: viewController.view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: viewController.view.centerYAnchor),
-        ])
-        return viewController
-    }()
+    private lazy var statisticsViewController = StatisticViewController()
 
     // MARK: - Lifecycle Methods
 
