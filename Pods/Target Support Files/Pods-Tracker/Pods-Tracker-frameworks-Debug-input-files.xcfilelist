@@ -1,0 +1,12 @@
+${PODS_ROOT}/Target Support Files/Pods-Tracker/Pods-Tracker-frameworks.sh
+${BUILT_PRODUCTS_DIR}/AppMetricaCore/AppMetricaCore.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaCoreUtils/AppMetricaCoreUtils.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaEncodingUtils/AppMetricaEncodingUtils.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaFMDB/AppMetricaFMDB.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaHostState/AppMetricaHostState.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaLog/AppMetricaLog.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaNetwork/AppMetricaNetwork.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaPlatform/AppMetricaPlatform.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaProtobuf/AppMetricaProtobuf.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaProtobufUtils/AppMetricaProtobufUtils.framework
+${BUILT_PRODUCTS_DIR}/AppMetricaStorageUtils/AppMetricaStorageUtils.framework

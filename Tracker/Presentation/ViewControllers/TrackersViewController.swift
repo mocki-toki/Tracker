@@ -187,6 +187,18 @@ final class TrackersViewController: UIViewController {
         filterTrackers()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        MetricaService.shared.reportEvent(event: "open", screen: "Main")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if self.isMovingFromParent || self.isBeingDismissed {
+            MetricaService.shared.reportEvent(event: "close", screen: "Main")
+        }
+    }
+
     // MARK: - Data Management
 
     private func loadTrackers() {
@@ -301,6 +313,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Actions
 
     @objc private func addButtonTapped() {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "add_track")
         let typeSelectionVC = TrackerTypeSelectionViewController()
         typeSelectionVC.onTypeSelected = { [weak self] type in
             self?.presentTrackerFormViewController(for: type)
@@ -355,6 +368,7 @@ final class TrackersViewController: UIViewController {
     }
 
     @objc private func filtersButtonTapped() {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "filter")
         let filtersVC = FiltersViewController(selectedFilter: selectedFilter)
         filtersVC.onFilterSelected = { [weak self] filter in
             self?.selectedFilter = filter
@@ -592,6 +606,7 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 
     private func editTracker(_ tracker: Tracker, category: TrackerCategory) {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "edit")
         let editTrackerVC = TrackerFormViewController(
             editedTracker: (tracker, completedDays(for: tracker)), category: category)
         editTrackerVC.onDone = { [weak self] newTracker, selectedCategory in
@@ -605,7 +620,12 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 
     private func deleteTracker(_ tracker: Tracker, at indexPath: IndexPath) {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "delete")
         dataProvider.deleteTracker(tracker)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "track")
     }
 }
 
