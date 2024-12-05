@@ -34,9 +34,11 @@ final class TrackersViewController: UIViewController {
             static let background = UIColor.white
             static let tint = UIColor.ypBlack
             static let placeholderText = UIColor.ypBlack
+            static let filtersButtonBackground = UIColor.ypBlue
         }
 
         enum Sizes {
+            static let cornerRadius: CGFloat = 16
             static let addButtonTopPadding: CGFloat = 16
             static let addButtonLeadingPadding: CGFloat = 16
             static let datePickerTopPadding: CGFloat = 16
@@ -52,8 +54,14 @@ final class TrackersViewController: UIViewController {
             static let cellHeight: CGFloat = 148
             static let headerHeight: CGFloat = 18
             static let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+            static let filtersButtonInsets = UIEdgeInsets(top: 14, left: 20, bottom: 14, right: 20)
             static let interItemSpacing: CGFloat = 9
             static let lineSpacing: CGFloat = 16
+
+            static let filtersButtonWidth: CGFloat = 44
+            static let filtersButtonHeight: CGFloat = 44
+            static let filtersButtonBottomPadding: CGFloat = 16
+            static let filtersButtonTrailingPadding: CGFloat = 16
         }
     }
 
@@ -65,6 +73,7 @@ final class TrackersViewController: UIViewController {
     private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = .init()
     private var searchText: String = ""
+    private var selectedFilter: FilterOption = .today
 
     // MARK: - Initialization
 
@@ -156,6 +165,18 @@ final class TrackersViewController: UIViewController {
         return collectionView
     }()
 
+    private lazy var filtersButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Фильтры", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = Constants.Sizes.cornerRadius
+        button.contentEdgeInsets = Constants.Sizes.filtersButtonInsets
+        button.backgroundColor = Constants.Colors.filtersButtonBackground
+        button.addTarget(self, action: #selector(filtersButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
     // MARK: - Lifecycle Methods
 
     override func viewDidLoad() {
@@ -172,7 +193,18 @@ final class TrackersViewController: UIViewController {
         categories = dataProvider.getAllTrackersWithCategories()
         completedTrackers = dataProvider.getAllRecords()
         filterTrackers()
+        setupCollectionViewInsets()
+
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: currentDate)
+        let currentWeekday = weekday == 1 ? Weekday.sunday : Weekday(rawValue: weekday - 1)!
+        let hasTrackersForSelectedDay = categories.flatMap { $0.trackers }.contains { tracker in
+            tracker.schedule?.contains(currentWeekday) ?? false
+        }
+        filtersButton.isHidden = !hasTrackersForSelectedDay
     }
+
+    // MARK: - Filtering Logic
 
     private func filterTrackers() {
         let calendar = Calendar.current
@@ -210,14 +242,60 @@ final class TrackersViewController: UIViewController {
         }
 
         filteredCategories.append(contentsOf: otherCategories)
-        visibleCategories = filteredCategories
 
+        switch selectedFilter {
+        case .all:
+            break
+        case .today:
+            currentDate = Date()
+
+            if !Calendar.current.isDate(Date(), inSameDayAs: datePicker.date) {
+                datePicker.date = currentDate
+                DispatchQueue.main.async {
+                    self.filterTrackers()
+                }
+            }
+        case .completed:
+            filteredCategories = filteredCategories.map { category in
+                let completedTrackers = category.trackers.filter { tracker in
+                    return isTrackerCompleted(tracker)
+                }
+                return TrackerCategory(
+                    id: category.id, name: category.name, trackers: completedTrackers)
+            }.filter { !$0.trackers.isEmpty }
+        case .incomplete:
+            filteredCategories = filteredCategories.map { category in
+                let incompleteTrackers = category.trackers.filter { tracker in
+                    return !isTrackerCompleted(tracker)
+                }
+                return TrackerCategory(
+                    id: category.id, name: category.name, trackers: incompleteTrackers)
+            }.filter { !$0.trackers.isEmpty }
+        }
+
+        visibleCategories = filteredCategories
         updatePlaceholderVisibility()
         collectionView.reloadData()
+
+        let hasTrackersForSelectedDay = categories.flatMap { $0.trackers }.contains { tracker in
+            tracker.schedule?.contains(currentWeekday) ?? false
+        }
+        filtersButton.isHidden = !hasTrackersForSelectedDay
     }
 
     private func updatePlaceholderVisibility() {
-        placeholderView.isHidden = !visibleCategories.isEmpty
+        if visibleCategories.isEmpty {
+            if selectedFilter == .completed || selectedFilter == .incomplete {
+                placeholderLabel.text = "Ничего не найдено"
+                placeholderImageView.image = UIImage.ypEmptyResultsPlaceholder
+            } else {
+                placeholderLabel.text = Constants.Texts.whatToTrack
+                placeholderImageView.image = UIImage.ypEmptyTrackersPlaceholder
+            }
+            placeholderView.isHidden = false
+        } else {
+            placeholderView.isHidden = true
+        }
     }
 
     // MARK: - Actions
@@ -245,6 +323,15 @@ final class TrackersViewController: UIViewController {
 
     @objc private func dateChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
+
+        if selectedFilter == .today && !Calendar.current.isDate(Date(), inSameDayAs: currentDate) {
+            selectedFilter = .all
+        } else if selectedFilter == .all
+            && Calendar.current.isDate(Date(), inSameDayAs: currentDate)
+        {
+            selectedFilter = .today
+        }
+
         filterTrackers()
     }
 
@@ -266,26 +353,40 @@ final class TrackersViewController: UIViewController {
 
         present(alert, animated: true, completion: nil)
     }
-}
 
-// MARK: - DataProviderDelegate
+    @objc private func filtersButtonTapped() {
+        let filtersVC = FiltersViewController(selectedFilter: selectedFilter)
+        filtersVC.onFilterSelected = { [weak self] filter in
+            self?.selectedFilter = filter
+            self?.filterTrackers()
 
-extension TrackersViewController: DataProviderDelegate {
-    func dataDidChange() {
-        DispatchQueue.main.async { [weak self] in
-            self?.loadTrackers()
+            guard let self = self else { return }
+            let calendar = Calendar.current
+            let weekday = calendar.component(.weekday, from: self.currentDate)
+            let currentWeekday = weekday == 1 ? Weekday.sunday : Weekday(rawValue: weekday - 1)!
+            let hasTrackersForSelectedDay = self.categories.flatMap { $0.trackers }.contains {
+                tracker in
+                tracker.schedule?.contains(currentWeekday) ?? false
+            }
+            self.filtersButton.isHidden = !hasTrackersForSelectedDay
+        }
+
+        filtersVC.modalPresentationStyle = .pageSheet
+
+        dismiss(animated: true) { [weak self] in
+            self?.present(filtersVC, animated: true)
         }
     }
-}
 
-// MARK: - UIConfigurable
+    // MARK: - UIConfigurable
 
-extension TrackersViewController: UIConfigurable {
     func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
-        for item in [addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView]
-        {
+        for item in [
+            addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView,
+            filtersButton,
+        ] {
             view.addSubview(item)
         }
 
@@ -322,7 +423,7 @@ extension TrackersViewController: UIConfigurable {
                 equalTo: searchBar.bottomAnchor, constant: Constants.Sizes.collectionViewTopPadding),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -339,7 +440,31 @@ extension TrackersViewController: UIConfigurable {
                 constant: Constants.Sizes.placeholderLabelTopPadding),
             placeholderLabel.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor),
             placeholderLabel.bottomAnchor.constraint(equalTo: placeholderView.bottomAnchor),
+
+            filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filtersButton.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor, constant: -Constants.Sizes.filtersButtonBottomPadding),
         ])
+    }
+
+    private func setupCollectionViewInsets() {
+        collectionView.contentInset = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: Constants.Sizes.filtersButtonHeight + Constants.Sizes.filtersButtonBottomPadding
+                + Constants.Sizes.collectionViewTopPadding,
+            right: 0
+        )
+    }
+}
+
+// MARK: - DataProviderDelegate
+
+extension TrackersViewController: DataProviderDelegate {
+    func dataDidChange() {
+        DispatchQueue.main.async { [weak self] in
+            self?.loadTrackers()
+        }
     }
 }
 

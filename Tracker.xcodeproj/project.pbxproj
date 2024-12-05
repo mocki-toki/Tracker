@@ -30,6 +30,8 @@
 		C1505FBE2CFFA3B40004CA1E /* CategoryFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1505FBD2CFFA3B40004CA1E /* CategoryFormViewController.swift */; };
 		C1505FEB2D005E2F0004CA1E /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1505FCD2D005E2F0004CA1E /* OnboardingViewController.swift */; };
 		C1505FEE2D005E2F0004CA1E /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1505FCC2D005E2F0004CA1E /* OnboardingPageViewController.swift */; };
+		C1505FF42D01D0400004CA1E /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1505FF32D01D0400004CA1E /* FiltersViewController.swift */; };
+		C1505FF62D01D9C50004CA1E /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1505FF52D01D9C50004CA1E /* FilterTableViewCell.swift */; };
 		C1CA54B82CB7DDAE0098090C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C1CA54B72CB7DDAE0098090C /* Localizable.xcstrings */; };
 		C1CA54BA2CB7E98E0098090C /* UIConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CA54B92CB7E98E0098090C /* UIConfigurable.swift */; };
 		C1CA54BC2CB7ED010098090C /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CA54BB2CB7ED010098090C /* TrackerType.swift */; };
@@ -73,6 +75,8 @@
 		C1505FBD2CFFA3B40004CA1E /* CategoryFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFormViewController.swift; sourceTree = "<group>"; };
 		C1505FCC2D005E2F0004CA1E /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		C1505FCD2D005E2F0004CA1E /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		C1505FF32D01D0400004CA1E /* FiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
+		C1505FF52D01D9C50004CA1E /* FilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
 		C1CA54B72CB7DDAE0098090C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		C1CA54B92CB7E98E0098090C /* UIConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConfigurable.swift; sourceTree = "<group>"; };
 		C1CA54BB2CB7ED010098090C /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
@@ -154,6 +158,7 @@
 		C1505FAD2CFF8A7D0004CA1E /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				C1505FF32D01D0400004CA1E /* FiltersViewController.swift */,
 				C1505FCC2D005E2F0004CA1E /* OnboardingPageViewController.swift */,
 				C1505FCD2D005E2F0004CA1E /* OnboardingViewController.swift */,
 				C13E04B92C941ECF00B79C7C /* MainViewController.swift */,
@@ -178,6 +183,7 @@
 		C1505FB12CFF8A7D0004CA1E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C1505FF52D01D9C50004CA1E /* FilterTableViewCell.swift */,
 				C1505FBB2CFF99D20004CA1E /* WeekdayTableCell.swift */,
 				C1505FB02CFF8A7D0004CA1E /* CategoryTableViewCell.swift */,
 				C13498832CE3E50B00386883 /* TrackerHeaderReusableView.swift */,
@@ -337,6 +343,8 @@
 				C1EED2A12CF4E25900439475 /* DataProvider.swift in Sources */,
 				C1EED2992CF4A62F00439475 /* Tracker+Extension.swift in Sources */,
 				C1505FBE2CFFA3B40004CA1E /* CategoryFormViewController.swift in Sources */,
+				C1505FF62D01D9C50004CA1E /* FilterTableViewCell.swift in Sources */,
+				C1505FF42D01D0400004CA1E /* FiltersViewController.swift in Sources */,
 				C13E04CA2C941ECF00B79C7C /* Weekday.swift in Sources */,
 				C1505FBC2CFF99D20004CA1E /* WeekdayTableCell.swift in Sources */,
 				C1F18A992CF49BF3005210DD /* Model.xcdatamodeld in Sources */,
