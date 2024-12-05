@@ -26,7 +26,6 @@ final class NewTrackerViewController: UIViewController {
                 "Category", comment: "Button for category selection")
             static let emoji = NSLocalizedString("Emoji", comment: "Subtitle for emoji selection")
             static let color = NSLocalizedString("Color", comment: "Subtitle for color selection")
-            static let generalCategory = "Общее"
         }
 
         enum Sizes {
@@ -68,6 +67,7 @@ final class NewTrackerViewController: UIViewController {
 
     private let trackerType: TrackerType
     private var selectedSchedule: Set<Weekday> = []
+    private var selectedCategory: TrackerCategory?
     private let emojis: [String] = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
@@ -89,7 +89,7 @@ final class NewTrackerViewController: UIViewController {
         }
     }
 
-    var onTrackerCreated: ((Tracker) -> Void)?
+    var onTrackerCreated: ((Tracker, TrackerCategory) -> Void)?
 
     // MARK: - UI Components
 
@@ -248,7 +248,7 @@ final class NewTrackerViewController: UIViewController {
         )
 
         dismiss(animated: true) { [weak self] in
-            self?.onTrackerCreated?(newTracker)
+            self?.onTrackerCreated?(newTracker, self!.selectedCategory!)
         }
     }
 
@@ -263,8 +263,8 @@ final class NewTrackerViewController: UIViewController {
     private func updateCreateButtonState() {
         let isNameValid = !(nameTextField.text?.isEmpty ?? true)
         let isScheduleValid = trackerType == .irregularEvent || !selectedSchedule.isEmpty
-        createButton.isEnabled = isNameValid && isScheduleValid
-        createButton.backgroundColor = Constants.Colors.createButtonBackground
+        let isCategoryValid = selectedCategory != nil
+        createButton.isEnabled = isNameValid && isScheduleValid && isCategoryValid
         createButton.layer.opacity = createButton.isEnabled ? 1 : 0.5
     }
 }
@@ -397,7 +397,7 @@ extension NewTrackerViewController: UITableViewDelegate, UITableViewDataSource {
                     top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             }
             cell.textLabel?.text = Constants.Texts.category
-            cell.detailTextLabel?.text = Constants.Texts.generalCategory
+            cell.detailTextLabel?.text = selectedCategory?.name
         }
 
         return cell
@@ -442,7 +442,16 @@ extension NewTrackerViewController {
         present(scheduleVC, animated: true, completion: nil)
     }
 
-    private func showCategoryViewController() {}
+    private func showCategoryViewController() {
+        let categoryVC = CategoryListViewController(viewModel: CategoryViewModel(), selectedCategory: selectedCategory)
+        categoryVC.onDone = { [weak self] selectedCategory in
+            self?.selectedCategory = selectedCategory
+            self?.tableView.reloadData()
+            self?.updateCreateButtonState()
+        }
+        categoryVC.modalPresentationStyle = .pageSheet
+        present(categoryVC, animated: true, completion: nil)
+    }
 }
 
 // MARK: - UICollectionViewDataSource

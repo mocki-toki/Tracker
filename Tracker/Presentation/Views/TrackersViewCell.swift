@@ -1,5 +1,5 @@
 //
-//  TrackerCell.swift
+//  TrackersViewCell.swift
 //  Tracker
 //
 //  Created by Simon Butenko on 04.09.2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackerCell: UICollectionViewCell {
+final class TrackersViewCell: UICollectionViewCell {
     // MARK: - Constants
 
     private enum Constants {
@@ -153,7 +153,7 @@ final class TrackerCell: UICollectionViewCell {
     }
 }
 
-extension TrackerCell: UIConfigurable {
+extension TrackersViewCell: UIConfigurable {
     func setupUI() {
         [cardView, daysCountLabel, plusButton].forEach { contentView.addSubview($0) }
         [emojiLabel, nameLabel].forEach { cardView.addSubview($0) }

@@ -38,19 +38,14 @@ final class DataProvider {
         trackerRecordStore.getAllRecords().map({ TrackerRecord(coreData: $0) })
     }
 
-    func addTracker(_ tracker: Tracker, categoryName: String) {
-        if let category = trackerCategoryStore.getAllCategories().first(where: {
-            $0.name == categoryName
-        }) {
-            trackerStore.addTracker(
-                name: tracker.name, emoji: tracker.emoji, colorName: tracker.colorName,
-                schedule: tracker.schedule, category: category)
-        } else {
-            let category = trackerCategoryStore.addCategory(name: categoryName)
-            trackerStore.addTracker(
-                name: tracker.name, emoji: tracker.emoji, colorName: tracker.colorName,
-                schedule: tracker.schedule, category: category)
-        }
+    func addTracker(_ tracker: Tracker, category: TrackerCategory) {
+        let categoryCoreData =
+            trackerCategoryStore.getCategory(byName: category.name)
+            ?? trackerCategoryStore.addCategory(name: category.name)
+
+        trackerStore.addTracker(
+            name: tracker.name, emoji: tracker.emoji, colorName: tracker.colorName,
+            schedule: tracker.schedule, categoryData: categoryCoreData)
     }
 
     func switchTrackerRecord(for tracker: Tracker, on date: Date) {
@@ -62,6 +57,15 @@ final class DataProvider {
             guard let trackerCoreData = trackerStore.getTracker(by: tracker.id) else { return }
             trackerRecordStore.addRecord(trackerCoreData: trackerCoreData, date: date)
         }
+    }
+
+    func addCategory(name categoryName: String) {
+        trackerCategoryStore.addCategory(name: categoryName)
+    }
+
+    func deleteCategory(_ category: TrackerCategory) {
+        trackerCategoryStore.deleteCategory(
+            TrackerCategoryCoreData(data: category, context: context))
     }
 }
 

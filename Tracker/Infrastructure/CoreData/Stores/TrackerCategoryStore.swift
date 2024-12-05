@@ -11,7 +11,7 @@ protocol TrackerCategoryStoreDelegate: AnyObject {
     func categoriesDidChange()
 }
 
-final class TrackerCategoryStore: NSObject, NSFetchedResultsControllerDelegate {
+final class TrackerCategoryStore: NSObject {
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
 
@@ -43,24 +43,34 @@ final class TrackerCategoryStore: NSObject, NSFetchedResultsControllerDelegate {
         }
     }
 
-    // MARK: - NSFetchedResultsControllerDelegate
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
-    {
-        delegate?.categoriesDidChange()
-    }
-
     func getAllCategories() -> [TrackerCategoryCoreData] {
         fetchedResultsController.fetchedObjects ?? []
     }
 
     @discardableResult
     func addCategory(name: String) -> TrackerCategoryCoreData {
+        if let existingCategory = getCategory(byName: name) {
+            return existingCategory
+        }
         let category = TrackerCategoryCoreData(context: context)
         category.id = UUID()
         category.name = name
         saveContext()
         return category
+    }
+
+    func getCategory(byName name: String) -> TrackerCategoryCoreData? {
+        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> =
+            TrackerCategoryCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+        fetchRequest.fetchLimit = 1
+        do {
+            let categories = try context.fetch(fetchRequest)
+            return categories.first
+        } catch {
+            print("Error fetching category by name: \(error)")
+            return nil
+        }
     }
 
     func deleteCategory(_ category: TrackerCategoryCoreData) {
@@ -76,5 +86,12 @@ final class TrackerCategoryStore: NSObject, NSFetchedResultsControllerDelegate {
                 print("Error saving context: \(error)")
             }
         }
+    }
+}
+
+extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
+    {
+        delegate?.categoriesDidChange()
     }
 }
