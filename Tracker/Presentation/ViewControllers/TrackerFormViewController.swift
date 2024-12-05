@@ -284,7 +284,8 @@ final class TrackerFormViewController: UIViewController {
                 name: name,
                 emoji: selectedEmoji,
                 colorName: selectedColorName,
-                schedule: trackerType == .habit ? selectedSchedule : nil
+                schedule: trackerType == .habit ? selectedSchedule : nil,
+                isPinned: false
             )
         } else {
             tracker = Tracker(
@@ -292,7 +293,8 @@ final class TrackerFormViewController: UIViewController {
                 name: name,
                 emoji: selectedEmoji,
                 colorName: selectedColorName,
-                schedule: trackerType == .habit ? selectedSchedule : nil
+                schedule: trackerType == .habit ? selectedSchedule : nil,
+                isPinned: false
             )
         }
 

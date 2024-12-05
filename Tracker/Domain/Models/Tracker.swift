@@ -7,10 +7,11 @@
 
 import UIKit
 
-struct Tracker : Hashable {
+struct Tracker: Hashable {
     let id: UUID
     let name: String
     let emoji: String
     let colorName: String
     let schedule: Set<Weekday>?
+    let isPinned: Bool
 }

@@ -50,8 +50,11 @@ final class TrackersViewCell: UICollectionViewCell {
 
     var onPlusButtonTap: (() -> Void)?
     var onMenuAction: ((_ action: MenuAction) -> Void)?
+    var isPinned: Bool = false
 
     enum MenuAction {
+        case unpin
+        case pin
         case edit
         case delete
     }
@@ -129,6 +132,7 @@ final class TrackersViewCell: UICollectionViewCell {
         emojiLabel.text = tracker.emoji
         nameLabel.text = tracker.name
         daysCountLabel.text = "\(pluralizeDays(completedDays))"
+        isPinned = tracker.isPinned
 
         let color = UIColor(named: tracker.colorName) ?? UIColor.systemGray
         cardView.backgroundColor = color
@@ -222,6 +226,14 @@ extension TrackersViewCell: UIContextMenuInteractionDelegate {
         configurationForMenuAtLocation location: CGPoint
     ) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let unpinAction = UIAction(title: "Открепить") { [weak self] _ in
+                self?.onMenuAction?(.unpin)
+            }
+
+            let pinAction = UIAction(title: "Закрепить") { [weak self] _ in
+                self?.onMenuAction?(.pin)
+            }
+
             let editAction = UIAction(title: "Редактировать") { [weak self] _ in
                 self?.onMenuAction?(.edit)
             }
@@ -231,7 +243,8 @@ extension TrackersViewCell: UIContextMenuInteractionDelegate {
                 self?.onMenuAction?(.delete)
             }
 
-            return UIMenu(children: [editAction, deleteAction])
+            let pinOrUnpinAction = self.isPinned ? unpinAction : pinAction
+            return UIMenu(children: [pinOrUnpinAction, editAction, deleteAction])
         }
     }
 }

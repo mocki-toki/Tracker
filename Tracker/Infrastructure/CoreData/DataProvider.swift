@@ -75,6 +75,16 @@ final class DataProvider {
         trackerStore.updateTracker(tracker, category: categoryCoreData)
     }
 
+    func pinTracker(_ tracker: Tracker) {
+        guard let trackerCoreData = trackerStore.getTracker(by: tracker.id) else { return }
+        trackerStore.pinTracker(trackerCoreData)
+    }
+
+    func unpinTracker(_ tracker: Tracker) {
+        guard let trackerCoreData = trackerStore.getTracker(by: tracker.id) else { return }
+        trackerStore.unpinTracker(trackerCoreData)
+    }
+
     func deleteTracker(_ tracker: Tracker) {
         guard let trackerCoreData = trackerStore.getTracker(by: tracker.id) else { return }
         trackerStore.deleteTracker(trackerCoreData)

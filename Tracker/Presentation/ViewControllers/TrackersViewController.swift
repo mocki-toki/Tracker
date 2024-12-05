@@ -179,22 +179,38 @@ final class TrackersViewController: UIViewController {
         let weekday = calendar.component(.weekday, from: currentDate)
         let currentWeekday = weekday == 1 ? Weekday.sunday : Weekday(rawValue: weekday - 1)!
 
-        visibleCategories = categories.compactMap { category in
+        let pinnedTrackers = categories.flatMap { $0.trackers }.filter { tracker in
+            tracker.isPinned && (tracker.schedule?.contains(currentWeekday) ?? true)
+        }
+
+        var filteredCategories: [TrackerCategory] = []
+        if !pinnedTrackers.isEmpty {
+            let pinnedCategory = TrackerCategory(
+                id: UUID(), name: "Закрепленные", trackers: pinnedTrackers)
+            filteredCategories.append(pinnedCategory)
+        }
+
+        let otherCategories = categories.compactMap { category -> TrackerCategory? in
             let filteredTrackers = category.trackers.filter { tracker in
+                guard !tracker.isPinned else { return false }
                 let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true
                 let matchesSearch =
                     searchText.isEmpty
                     || tracker.name.lowercased().contains(searchText.lowercased())
                 return matchesSchedule && matchesSearch
             }
+
             return filteredTrackers.isEmpty
                 ? nil
                 : TrackerCategory(
-                    id: UUID(),
+                    id: category.id,
                     name: category.name,
                     trackers: filteredTrackers
                 )
         }
+
+        filteredCategories.append(contentsOf: otherCategories)
+        visibleCategories = filteredCategories
 
         updatePlaceholderVisibility()
         collectionView.reloadData()
@@ -378,6 +394,12 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
             guard let self = self else { return }
 
             switch action {
+            case .pin:
+                self.dataProvider.pinTracker(tracker)
+                self.filterTrackers()
+            case .unpin:
+                self.dataProvider.unpinTracker(tracker)
+                self.filterTrackers()
             case .edit:
                 self.editTracker(tracker, category: self.visibleCategories[indexPath.section])
             case .delete:

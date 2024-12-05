@@ -91,6 +91,16 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate {
         saveContext()
     }
 
+    func pinTracker(_ tracker: TrackerCoreData) {
+        tracker.isPinned = true
+        saveContext()
+    }
+
+    func unpinTracker(_ tracker: TrackerCoreData) {
+        tracker.isPinned = false
+        saveContext()
+    }
+
     private func saveContext() {
         if context.hasChanges {
             do {
