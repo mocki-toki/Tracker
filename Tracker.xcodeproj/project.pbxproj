@@ -16,7 +16,7 @@
 		C13E04C22C941ECF00B79C7C /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04B62C941ECF00B79C7C /* TrackerCategory.swift */; };
 		C13E04C32C941ECF00B79C7C /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04B72C941ECF00B79C7C /* TrackerRecord.swift */; };
 		C13E04C42C941ECF00B79C7C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04B92C941ECF00B79C7C /* MainViewController.swift */; };
-		C13E04C52C941ECF00B79C7C /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BA2C941ECF00B79C7C /* NewTrackerViewController.swift */; };
+		C13E04C52C941ECF00B79C7C /* TrackerFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BA2C941ECF00B79C7C /* TrackerFormViewController.swift */; };
 		C13E04C62C941ECF00B79C7C /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BB2C941ECF00B79C7C /* ScheduleViewController.swift */; };
 		C13E04C72C941ECF00B79C7C /* TrackersViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BC2C941ECF00B79C7C /* TrackersViewCell.swift */; };
 		C13E04C82C941ECF00B79C7C /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13E04BD2C941ECF00B79C7C /* TrackersViewController.swift */; };
@@ -58,7 +58,7 @@
 		C13E04B62C941ECF00B79C7C /* TrackerCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		C13E04B72C941ECF00B79C7C /* TrackerRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		C13E04B92C941ECF00B79C7C /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		C13E04BA2C941ECF00B79C7C /* NewTrackerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
+		C13E04BA2C941ECF00B79C7C /* TrackerFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerFormViewController.swift; sourceTree = "<group>"; };
 		C13E04BB2C941ECF00B79C7C /* ScheduleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		C13E04BC2C941ECF00B79C7C /* TrackersViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackersViewCell.swift; sourceTree = "<group>"; };
 		C13E04BD2C941ECF00B79C7C /* TrackersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
@@ -160,7 +160,7 @@
 				C1505FAB2CFF8A7D0004CA1E /* CategoryListViewController.swift */,
 				C1505FBD2CFFA3B40004CA1E /* CategoryFormViewController.swift */,
 				C13E04BB2C941ECF00B79C7C /* ScheduleViewController.swift */,
-				C13E04BA2C941ECF00B79C7C /* NewTrackerViewController.swift */,
+				C13E04BA2C941ECF00B79C7C /* TrackerFormViewController.swift */,
 				C13E04BE2C941ECF00B79C7C /* TrackerTypeSelectionViewController.swift */,
 				C13E04BD2C941ECF00B79C7C /* TrackersViewController.swift */,
 			);
@@ -348,7 +348,7 @@
 				C1505FB22CFF8A7D0004CA1E /* CategoryTableViewCell.swift in Sources */,
 				C1505FB32CFF8A7D0004CA1E /* CategoryListViewController.swift in Sources */,
 				C1505FB42CFF8A7D0004CA1E /* CategoryViewModel.swift in Sources */,
-				C13E04C52C941ECF00B79C7C /* NewTrackerViewController.swift in Sources */,
+				C13E04C52C941ECF00B79C7C /* TrackerFormViewController.swift in Sources */,
 				C13E04C62C941ECF00B79C7C /* ScheduleViewController.swift in Sources */,
 				C13CFD6A2C8E40F500E7800F /* AppDelegate.swift in Sources */,
 				C1505FEB2D005E2F0004CA1E /* OnboardingViewController.swift in Sources */,

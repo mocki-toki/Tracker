@@ -52,6 +52,7 @@ final class TrackersViewCell: UICollectionViewCell {
     var onMenuAction: ((_ action: MenuAction) -> Void)?
 
     enum MenuAction {
+        case edit
         case delete
     }
 
@@ -221,12 +222,16 @@ extension TrackersViewCell: UIContextMenuInteractionDelegate {
         configurationForMenuAtLocation location: CGPoint
     ) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+                self?.onMenuAction?(.edit)
+            }
+
             let deleteAction = UIAction(title: "Удалить", attributes: .destructive) {
                 [weak self] _ in
                 self?.onMenuAction?(.delete)
             }
 
-            return UIMenu(children: [deleteAction])
+            return UIMenu(children: [editAction, deleteAction])
         }
     }
 }

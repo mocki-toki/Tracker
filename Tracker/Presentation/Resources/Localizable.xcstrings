@@ -63,7 +63,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Привычки и события можно\nобъединить по смыслу"
           }
         }
@@ -238,6 +238,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Редактирование категории"
+          }
+        }
+      }
+    },
+    "EditTracker" : {
+      "comment" : "Title for editing a tracker",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Tracker"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Редактирование привычки"
           }
         }
       }
@@ -482,6 +499,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Суббота"
+          }
+        }
+      }
+    },
+    "Save" : {
+      "comment" : "Save button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить"
           }
         }
       }

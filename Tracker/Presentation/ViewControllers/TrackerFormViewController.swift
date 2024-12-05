@@ -1,5 +1,5 @@
 //
-//  NewTrackerViewController.swift
+//  TrackerFormViewController.swift
 //  Tracker
 //
 //  Created by Simon Butenko on 02.08.2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewTrackerViewController: UIViewController {
+final class TrackerFormViewController: UIViewController {
     // MARK: - Constants
 
     private enum Constants {
@@ -16,10 +16,13 @@ final class NewTrackerViewController: UIViewController {
                 "EnterTrackName", comment: "Enter track name hint")
             static let cancel = NSLocalizedString("Cancel", comment: "Cancel button")
             static let create = NSLocalizedString("Create", comment: "Create button")
+            static let save = NSLocalizedString("Save", comment: "Save button")
             static let newHabit = NSLocalizedString(
                 "NewHabit", comment: "Title for creating a new habit")
             static let newIrregularEvent = NSLocalizedString(
                 "NewIrregularEvent", comment: "Title for creating a new irregular event")
+            static let editTracker = NSLocalizedString(
+                "EditTracker", comment: "Title for editing a tracker")
             static let schedule = NSLocalizedString(
                 "Schedule", comment: "Button for schedule section")
             static let category = NSLocalizedString(
@@ -50,8 +53,8 @@ final class NewTrackerViewController: UIViewController {
             static let textFieldBackground = UIColor.ypBackground
             static let cellBackground = UIColor.ypBackground
             static let cancelButtonBorder = UIColor.red
-            static let createButtonBackground = UIColor.ypBlack
-            static let createButtonText = UIColor.white
+            static let doneButtonBackground = UIColor.ypBlack
+            static let doneButtonText = UIColor.white
             static let detailTextColor = UIColor.ypGray
             static let headerTextColor = UIColor.ypBlack
         }
@@ -65,6 +68,7 @@ final class NewTrackerViewController: UIViewController {
 
     // MARK: - Properties
 
+    private let editedTracker: (tracker: Tracker, completedDays: Int)?
     private let trackerType: TrackerType
     private var selectedSchedule: Set<Weekday> = []
     private var selectedCategory: TrackerCategory?
@@ -77,19 +81,19 @@ final class NewTrackerViewController: UIViewController {
         "YP Palette \($0)"
     }
 
-    private lazy var selectedEmoji: String = self.emojis.first! {
+    private var selectedEmoji: String {
         didSet {
-            updateCreateButtonState()
+            updateDoneButtonState()
         }
     }
 
-    private lazy var selectedColorName: String = self.colorNames.first! {
+    private var selectedColorName: String {
         didSet {
-            updateCreateButtonState()
+            updateDoneButtonState()
         }
     }
 
-    var onTrackerCreated: ((Tracker, TrackerCategory) -> Void)?
+    var onDone: ((Tracker, TrackerCategory) -> Void)?
 
     // MARK: - UI Components
 
@@ -176,23 +180,47 @@ final class NewTrackerViewController: UIViewController {
         return button
     }()
 
-    private lazy var createButton: UIButton = {
+    private lazy var doneButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Constants.Texts.create, for: .normal)
-        button.setTitleColor(Constants.Colors.createButtonText, for: .normal)
-        button.backgroundColor = Constants.Colors.createButtonBackground
+        button.setTitle(
+            editedTracker != nil ? Constants.Texts.save : Constants.Texts.create, for: .normal)
+        button.setTitleColor(Constants.Colors.doneButtonText, for: .normal)
+        button.backgroundColor = Constants.Colors.doneButtonBackground
         button.layer.cornerRadius = Constants.Sizes.cornerRadius
-        button.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
         return button
+    }()
+
+    private lazy var daysLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
     }()
 
     // MARK: - Initialization
 
     init(type: TrackerType) {
         self.trackerType = type
+        self.editedTracker = nil
+        self.selectedEmoji = emojis.first!
+        self.selectedColorName = colorNames.first!
         super.init(nibName: nil, bundle: nil)
+    }
+
+    init(editedTracker: (tracker: Tracker, completedDays: Int), category: TrackerCategory) {
+        self.editedTracker = editedTracker
+        self.trackerType = editedTracker.tracker.schedule != nil ? .habit : .irregularEvent
+        self.selectedEmoji = editedTracker.tracker.emoji
+        self.selectedColorName = editedTracker.tracker.colorName
+        self.selectedSchedule = editedTracker.tracker.schedule ?? []
+        self.selectedCategory = category
+        super.init(nibName: nil, bundle: nil)
+        self.nameTextField.text = editedTracker.tracker.name
     }
 
     @available(*, unavailable)
@@ -214,11 +242,21 @@ final class NewTrackerViewController: UIViewController {
     // MARK: - UI Setup
 
     private func configureForTrackerType() {
-        switch trackerType {
-        case .habit:
-            titleLabel.text = Constants.Texts.newHabit
-        case .irregularEvent:
-            titleLabel.text = Constants.Texts.newIrregularEvent
+        if let editedTracker = editedTracker {
+            titleLabel.text = Constants.Texts.editTracker
+            daysLabel.text = String.localizedStringWithFormat(
+                NSLocalizedString("Days", comment: "Number of days"),
+                editedTracker.completedDays
+            )
+            daysLabel.isHidden = false
+        } else {
+            switch trackerType {
+            case .habit:
+                titleLabel.text = Constants.Texts.newHabit
+            case .irregularEvent:
+                titleLabel.text = Constants.Texts.newIrregularEvent
+            }
+            daysLabel.isHidden = true
         }
     }
 
@@ -236,19 +274,30 @@ final class NewTrackerViewController: UIViewController {
         dismiss(animated: true)
     }
 
-    @objc private func createButtonTapped() {
+    @objc private func doneButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else { return }
 
-        let newTracker = Tracker(
-            id: UUID(),
-            name: name,
-            emoji: selectedEmoji,
-            colorName: selectedColorName,
-            schedule: trackerType == .habit ? selectedSchedule : nil
-        )
+        let tracker: Tracker
+        if let editedTracker = editedTracker {
+            tracker = Tracker(
+                id: editedTracker.tracker.id,
+                name: name,
+                emoji: selectedEmoji,
+                colorName: selectedColorName,
+                schedule: trackerType == .habit ? selectedSchedule : nil
+            )
+        } else {
+            tracker = Tracker(
+                id: UUID(),
+                name: name,
+                emoji: selectedEmoji,
+                colorName: selectedColorName,
+                schedule: trackerType == .habit ? selectedSchedule : nil
+            )
+        }
 
         dismiss(animated: true) { [weak self] in
-            self?.onTrackerCreated?(newTracker, self!.selectedCategory!)
+            self?.onDone?(tracker, self!.selectedCategory!)
         }
     }
 
@@ -257,37 +306,38 @@ final class NewTrackerViewController: UIViewController {
     }
 
     @objc private func textFieldDidChange() {
-        updateCreateButtonState()
+        updateDoneButtonState()
     }
 
-    private func updateCreateButtonState() {
+    private func updateDoneButtonState() {
         let isNameValid = !(nameTextField.text?.isEmpty ?? true)
         let isScheduleValid = trackerType == .irregularEvent || !selectedSchedule.isEmpty
         let isCategoryValid = selectedCategory != nil
-        createButton.isEnabled = isNameValid && isScheduleValid && isCategoryValid
-        createButton.layer.opacity = createButton.isEnabled ? 1 : 0.5
+        doneButton.isEnabled = isNameValid && isScheduleValid && isCategoryValid
+        doneButton.layer.opacity = doneButton.isEnabled ? 1 : 0.5
     }
 }
 
 // MARK: - UIConfigurable
 
-extension NewTrackerViewController: UIConfigurable {
+extension TrackerFormViewController: UIConfigurable {
     func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
 
-        [titleLabel, nameTextField, tableView, collectionView, cancelButton, createButton].forEach {
-            contentView.addSubview($0)
-        }
+        [titleLabel, daysLabel, nameTextField, tableView, collectionView, cancelButton, doneButton]
+            .forEach {
+                contentView.addSubview($0)
+            }
 
         nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        updateCreateButtonState()
+        updateDoneButtonState()
     }
 
     func setupConstraints() {
-        NSLayoutConstraint.activate([
+        var constraints: [NSLayoutConstraint] = [
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -303,18 +353,8 @@ extension NewTrackerViewController: UIConfigurable {
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
             titleLabel.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: Constants.Paddings.titleTopPadding),
+                equalTo: contentView.topAnchor, constant: Constants.Paddings.titleTopPadding),
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-
-            nameTextField.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor, constant: Constants.Paddings.textFieldTopPadding),
-            nameTextField.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
-            nameTextField.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor, constant: -Constants.Paddings.horizontalPadding
-            ),
-            nameTextField.heightAnchor.constraint(equalToConstant: Constants.Sizes.textFieldHeight),
 
             tableView.topAnchor.constraint(
                 equalTo: nameTextField.bottomAnchor,
@@ -329,8 +369,7 @@ extension NewTrackerViewController: UIConfigurable {
                     ? Constants.Sizes.tableViewCellHeight * 2 : Constants.Sizes.tableViewCellHeight),
 
             collectionView.topAnchor.constraint(
-                equalTo: tableView.bottomAnchor,
-                constant: Constants.Paddings.tableViewTopPadding),
+                equalTo: tableView.bottomAnchor, constant: Constants.Paddings.tableViewTopPadding),
             collectionView.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
             collectionView.trailingAnchor.constraint(
@@ -339,32 +378,61 @@ extension NewTrackerViewController: UIConfigurable {
             collectionView.heightAnchor.constraint(equalToConstant: 460),
 
             cancelButton.topAnchor.constraint(
-                equalTo: collectionView.bottomAnchor,
-                constant: Constants.Paddings.buttonSpacing),
+                equalTo: collectionView.bottomAnchor, constant: Constants.Paddings.buttonSpacing),
             cancelButton.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor, constant: Constants.Paddings.horizontalPadding),
             cancelButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
-            cancelButton.widthAnchor.constraint(equalTo: createButton.widthAnchor),
+            cancelButton.widthAnchor.constraint(equalTo: doneButton.widthAnchor),
 
-            createButton.topAnchor.constraint(
-                equalTo: collectionView.bottomAnchor,
-                constant: Constants.Paddings.buttonSpacing),
-            createButton.trailingAnchor.constraint(
+            doneButton.topAnchor.constraint(
+                equalTo: collectionView.bottomAnchor, constant: Constants.Paddings.buttonSpacing),
+            doneButton.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor, constant: -Constants.Paddings.horizontalPadding
             ),
-            createButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
-            createButton.leadingAnchor.constraint(
+            doneButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.buttonHeight),
+            doneButton.leadingAnchor.constraint(
                 equalTo: cancelButton.trailingAnchor, constant: Constants.Paddings.buttonSpacing),
-            createButton.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -Constants.Paddings.buttonBottomPadding),
-        ])
+            doneButton.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor, constant: -Constants.Paddings.buttonBottomPadding
+            ),
+        ]
+
+        if editedTracker == nil {
+            constraints += [
+                nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+                nameTextField.leadingAnchor.constraint(
+                    equalTo: contentView.leadingAnchor,
+                    constant: Constants.Paddings.horizontalPadding),
+                nameTextField.trailingAnchor.constraint(
+                    equalTo: contentView.trailingAnchor,
+                    constant: -Constants.Paddings.horizontalPadding),
+                nameTextField.heightAnchor.constraint(
+                    equalToConstant: Constants.Sizes.textFieldHeight),
+            ]
+        } else {
+            constraints += [
+                daysLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+                daysLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
+                nameTextField.topAnchor.constraint(equalTo: daysLabel.bottomAnchor, constant: 40),
+                nameTextField.leadingAnchor.constraint(
+                    equalTo: contentView.leadingAnchor,
+                    constant: Constants.Paddings.horizontalPadding),
+                nameTextField.trailingAnchor.constraint(
+                    equalTo: contentView.trailingAnchor,
+                    constant: -Constants.Paddings.horizontalPadding),
+                nameTextField.heightAnchor.constraint(
+                    equalToConstant: Constants.Sizes.textFieldHeight),
+            ]
+        }
+
+        NSLayoutConstraint.activate(constraints)
     }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
-extension NewTrackerViewController: UITableViewDelegate, UITableViewDataSource {
+extension TrackerFormViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -420,7 +488,7 @@ extension NewTrackerViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - UITextFieldDelegate
 
-extension NewTrackerViewController: UITextFieldDelegate {
+extension TrackerFormViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -429,25 +497,26 @@ extension NewTrackerViewController: UITextFieldDelegate {
 
 // MARK: - Navigation
 
-extension NewTrackerViewController {
+extension TrackerFormViewController {
     private func showScheduleViewController() {
         let scheduleVC = ScheduleViewController()
         scheduleVC.selectedWeekdays = selectedSchedule
         scheduleVC.onDone = { [weak self] selectedWeekdays in
             self?.selectedSchedule = selectedWeekdays
             self?.tableView.reloadData()
-            self?.updateCreateButtonState()
+            self?.updateDoneButtonState()
         }
         scheduleVC.modalPresentationStyle = .pageSheet
         present(scheduleVC, animated: true, completion: nil)
     }
 
     private func showCategoryViewController() {
-        let categoryVC = CategoryListViewController(viewModel: CategoryViewModel(), selectedCategory: selectedCategory)
+        let categoryVC = CategoryListViewController(
+            viewModel: CategoryViewModel(), selectedCategory: selectedCategory)
         categoryVC.onDone = { [weak self] selectedCategory in
             self?.selectedCategory = selectedCategory
             self?.tableView.reloadData()
-            self?.updateCreateButtonState()
+            self?.updateDoneButtonState()
         }
         categoryVC.modalPresentationStyle = .pageSheet
         present(categoryVC, animated: true, completion: nil)
@@ -456,7 +525,7 @@ extension NewTrackerViewController {
 
 // MARK: - UICollectionViewDataSource
 
-extension NewTrackerViewController: UICollectionViewDataSource {
+extension TrackerFormViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int { 2 }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int)
@@ -518,7 +587,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension NewTrackerViewController: UICollectionViewDelegate {
+extension TrackerFormViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let previousSelectedIndexPath: IndexPath?
         if indexPath.section == 0 {
@@ -555,7 +624,7 @@ extension NewTrackerViewController: UICollectionViewDelegate {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
+extension TrackerFormViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath:

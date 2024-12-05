@@ -209,26 +209,22 @@ final class TrackersViewController: UIViewController {
     @objc private func addButtonTapped() {
         let typeSelectionVC = TrackerTypeSelectionViewController()
         typeSelectionVC.onTypeSelected = { [weak self] type in
-            self?.presentNewTrackerViewController(for: type)
+            self?.presentTrackerFormViewController(for: type)
         }
         typeSelectionVC.modalPresentationStyle = .pageSheet
         present(typeSelectionVC, animated: true)
     }
 
-    private func presentNewTrackerViewController(for type: TrackerType) {
-        let newTrackerVC = NewTrackerViewController(type: type)
-        newTrackerVC.onTrackerCreated = { [weak self] newTracker, selectedCategory in
-            self?.addNewTracker(newTracker, category: selectedCategory)
+    private func presentTrackerFormViewController(for type: TrackerType) {
+        let newTrackerVC = TrackerFormViewController(type: type)
+        newTrackerVC.onDone = { [weak self] newTracker, selectedCategory in
+            self?.dataProvider.addTracker(newTracker, category: selectedCategory)
         }
         newTrackerVC.modalPresentationStyle = .pageSheet
 
         dismiss(animated: true) { [weak self] in
             self?.present(newTrackerVC, animated: true)
         }
-    }
-
-    private func addNewTracker(_ tracker: Tracker, category selectedCategory: TrackerCategory) {
-        dataProvider.addTracker(tracker, category: selectedCategory)
     }
 
     @objc private func dateChanged(_ sender: UIDatePicker) {
@@ -379,9 +375,13 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
         }
 
         cell.onMenuAction = { [weak self] action in
+            guard let self = self else { return }
+
             switch action {
+            case .edit:
+                self.editTracker(tracker, category: self.visibleCategories[indexPath.section])
             case .delete:
-                self?.presentDeleteAlert(for: tracker)
+                self.presentDeleteAlert(for: tracker)
             }
         }
 
@@ -442,6 +442,19 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
         return Constants.Sizes.lineSpacing
+    }
+
+    private func editTracker(_ tracker: Tracker, category: TrackerCategory) {
+        let editTrackerVC = TrackerFormViewController(
+            editedTracker: (tracker, completedDays(for: tracker)), category: category)
+        editTrackerVC.onDone = { [weak self] newTracker, selectedCategory in
+            self?.dataProvider.updateTracker(newTracker, category: selectedCategory)
+        }
+        editTrackerVC.modalPresentationStyle = .pageSheet
+
+        dismiss(animated: true) { [weak self] in
+            self?.present(editTrackerVC, animated: true)
+        }
     }
 
     private func deleteTracker(_ tracker: Tracker, at indexPath: IndexPath) {

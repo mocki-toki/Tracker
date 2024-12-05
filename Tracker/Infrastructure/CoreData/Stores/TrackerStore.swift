@@ -73,6 +73,19 @@ final class TrackerStore: NSObject, NSFetchedResultsControllerDelegate {
         return tracker
     }
 
+    @discardableResult
+    func updateTracker(_ tracker: Tracker, category: TrackerCategoryCoreData) -> TrackerCoreData? {
+        let trackerCoreData = getTracker(by: tracker.id)
+        trackerCoreData?.name = tracker.name
+        trackerCoreData?.emoji = tracker.emoji
+        trackerCoreData?.colorName = tracker.colorName
+        trackerCoreData?.schedule = tracker.schedule?.map { "\($0.rawValue)" }.joined(
+            separator: ",")
+        trackerCoreData?.category = category
+        saveContext()
+        return trackerCoreData
+    }
+
     func deleteTracker(_ tracker: TrackerCoreData) {
         context.delete(tracker)
         saveContext()

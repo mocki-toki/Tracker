@@ -68,6 +68,13 @@ final class DataProvider {
             TrackerCategoryCoreData(data: category, context: context))
     }
 
+    func updateTracker(_ tracker: Tracker, category: TrackerCategory) {
+        let categoryCoreData =
+            trackerCategoryStore.getCategory(byName: category.name)
+            ?? trackerCategoryStore.addCategory(name: category.name)
+        trackerStore.updateTracker(tracker, category: categoryCoreData)
+    }
+
     func deleteTracker(_ tracker: Tracker) {
         guard let trackerCoreData = trackerStore.getTracker(by: tracker.id) else { return }
         trackerStore.deleteTracker(trackerCoreData)
