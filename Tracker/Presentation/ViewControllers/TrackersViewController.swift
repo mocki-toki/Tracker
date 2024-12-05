@@ -22,7 +22,16 @@ final class TrackersViewController: UIViewController {
             static let cannotMarkFutureDate = NSLocalizedString(
                 "CannotMarkFutureDate",
                 comment: "Error message when trying to mark a tracker for a future date")
-            static let ok = "OK"
+            static let ok = NSLocalizedString("OK", comment: "OK button title")
+            static let deleteConfirmationMessage = NSLocalizedString(
+                "DeleteConfirmationMessage",
+                comment: "Message asking for tracker deletion confirmation")
+            static let delete = NSLocalizedString("Delete", comment: "Delete action title")
+            static let cancel = NSLocalizedString("Cancel", comment: "Cancel action title")
+            static let filters = NSLocalizedString("Filters", comment: "Filters button title")
+            static let nothingFound = NSLocalizedString(
+                "NothingFound",
+                comment: "Message shown when no trackers are found")
         }
 
         enum Fonts {
@@ -31,12 +40,14 @@ final class TrackersViewController: UIViewController {
         }
 
         enum Colors {
-            static let background = UIColor.white
+            static let background = UIColor.ypWhite
             static let tint = UIColor.ypBlack
             static let placeholderText = UIColor.ypBlack
+            static let filtersButtonBackground = UIColor.ypBlue
         }
 
         enum Sizes {
+            static let cornerRadius: CGFloat = 16
             static let addButtonTopPadding: CGFloat = 16
             static let addButtonLeadingPadding: CGFloat = 16
             static let datePickerTopPadding: CGFloat = 16
@@ -52,8 +63,14 @@ final class TrackersViewController: UIViewController {
             static let cellHeight: CGFloat = 148
             static let headerHeight: CGFloat = 18
             static let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+            static let filtersButtonInsets = UIEdgeInsets(top: 14, left: 20, bottom: 14, right: 20)
             static let interItemSpacing: CGFloat = 9
             static let lineSpacing: CGFloat = 16
+
+            static let filtersButtonWidth: CGFloat = 44
+            static let filtersButtonHeight: CGFloat = 44
+            static let filtersButtonBottomPadding: CGFloat = 16
+            static let filtersButtonTrailingPadding: CGFloat = 16
         }
     }
 
@@ -65,6 +82,7 @@ final class TrackersViewController: UIViewController {
     private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = .init()
     private var searchText: String = ""
+    private var selectedFilter: FilterOption = .today
 
     // MARK: - Initialization
 
@@ -156,6 +174,18 @@ final class TrackersViewController: UIViewController {
         return collectionView
     }()
 
+    private lazy var filtersButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(Constants.Texts.filters, for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.layer.cornerRadius = Constants.Sizes.cornerRadius
+        button.contentEdgeInsets = Constants.Sizes.filtersButtonInsets
+        button.backgroundColor = Constants.Colors.filtersButtonBackground
+        button.addTarget(self, action: #selector(filtersButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
     // MARK: - Lifecycle Methods
 
     override func viewDidLoad() {
@@ -166,59 +196,146 @@ final class TrackersViewController: UIViewController {
         filterTrackers()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        MetricaService.shared.reportEvent(event: "open", screen: "Main")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if self.isMovingFromParent || self.isBeingDismissed {
+            MetricaService.shared.reportEvent(event: "close", screen: "Main")
+        }
+    }
+
     // MARK: - Data Management
 
     private func loadTrackers() {
         categories = dataProvider.getAllTrackersWithCategories()
         completedTrackers = dataProvider.getAllRecords()
         filterTrackers()
+        setupCollectionViewInsets()
+
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: currentDate)
+        let currentWeekday = weekday == 1 ? Weekday.sunday : Weekday(rawValue: weekday - 1)!
+        let hasTrackersForSelectedDay = categories.flatMap { $0.trackers }.contains { tracker in
+            tracker.schedule?.contains(currentWeekday) ?? false
+        }
+        filtersButton.isHidden = !hasTrackersForSelectedDay
     }
+
+    // MARK: - Filtering Logic
 
     private func filterTrackers() {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: currentDate)
         let currentWeekday = weekday == 1 ? Weekday.sunday : Weekday(rawValue: weekday - 1)!
 
-        visibleCategories = categories.compactMap { category in
+        let pinnedTrackers = categories.flatMap { $0.trackers }.filter { tracker in
+            tracker.isPinned && (tracker.schedule?.contains(currentWeekday) ?? true)
+        }
+
+        var filteredCategories: [TrackerCategory] = []
+        if !pinnedTrackers.isEmpty {
+            let pinnedCategory = TrackerCategory(
+                id: UUID(), name: NSLocalizedString("Pinned", comment: "Pinned category name"),
+                trackers: pinnedTrackers)
+            filteredCategories.append(pinnedCategory)
+        }
+
+        let otherCategories = categories.compactMap { category -> TrackerCategory? in
             let filteredTrackers = category.trackers.filter { tracker in
+                guard !tracker.isPinned else { return false }
                 let matchesSchedule = tracker.schedule?.contains(currentWeekday) ?? true
                 let matchesSearch =
                     searchText.isEmpty
                     || tracker.name.lowercased().contains(searchText.lowercased())
                 return matchesSchedule && matchesSearch
             }
+
             return filteredTrackers.isEmpty
                 ? nil
                 : TrackerCategory(
-                    id: UUID(),
+                    id: category.id,
                     name: category.name,
                     trackers: filteredTrackers
                 )
         }
 
+        filteredCategories.append(contentsOf: otherCategories)
+
+        switch selectedFilter {
+        case .all:
+            break
+        case .today:
+            currentDate = Date()
+
+            if !Calendar.current.isDate(currentDate, inSameDayAs: datePicker.date) {
+                datePicker.date = currentDate
+                DispatchQueue.main.async {
+                    self.filterTrackers()
+                }
+            }
+        case .completed:
+            filteredCategories = filteredCategories.map { category in
+                let completedTrackers = category.trackers.filter { tracker in
+                    return isTrackerCompleted(tracker)
+                }
+                return TrackerCategory(
+                    id: category.id, name: category.name, trackers: completedTrackers)
+            }.filter { !$0.trackers.isEmpty }
+        case .incomplete:
+            filteredCategories = filteredCategories.map { category in
+                let incompleteTrackers = category.trackers.filter { tracker in
+                    return !isTrackerCompleted(tracker)
+                }
+                return TrackerCategory(
+                    id: category.id, name: category.name, trackers: incompleteTrackers)
+            }.filter { !$0.trackers.isEmpty }
+        }
+
+        visibleCategories = filteredCategories
         updatePlaceholderVisibility()
         collectionView.reloadData()
+
+        let hasTrackersForSelectedDay = categories.flatMap { $0.trackers }.contains { tracker in
+            tracker.schedule?.contains(currentWeekday) ?? false
+        }
+        filtersButton.isHidden = !hasTrackersForSelectedDay
     }
 
     private func updatePlaceholderVisibility() {
-        placeholderView.isHidden = !visibleCategories.isEmpty
+        if visibleCategories.isEmpty {
+            if selectedFilter == .completed || selectedFilter == .incomplete {
+                placeholderLabel.text = Constants.Texts.nothingFound
+                placeholderImageView.image = UIImage.ypEmptyResultsPlaceholder
+            } else {
+                placeholderLabel.text = Constants.Texts.whatToTrack
+                placeholderImageView.image = UIImage.ypEmptyTrackersPlaceholder
+            }
+            placeholderView.isHidden = false
+        } else {
+            placeholderView.isHidden = true
+        }
     }
 
     // MARK: - Actions
 
     @objc private func addButtonTapped() {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "add_track")
         let typeSelectionVC = TrackerTypeSelectionViewController()
         typeSelectionVC.onTypeSelected = { [weak self] type in
-            self?.presentNewTrackerViewController(for: type)
+            self?.presentTrackerFormViewController(for: type)
         }
         typeSelectionVC.modalPresentationStyle = .pageSheet
         present(typeSelectionVC, animated: true)
     }
 
-    private func presentNewTrackerViewController(for type: TrackerType) {
-        let newTrackerVC = NewTrackerViewController(type: type)
-        newTrackerVC.onTrackerCreated = { [weak self] newTracker, selectedCategory in
-            self?.addNewTracker(newTracker, category: selectedCategory)
+    private func presentTrackerFormViewController(for type: TrackerType) {
+        let newTrackerVC = TrackerFormViewController(type: type)
+        newTrackerVC.onDone = { [weak self] newTracker, selectedCategory in
+            self?.dataProvider.addTracker(newTracker, category: selectedCategory)
         }
         newTrackerVC.modalPresentationStyle = .pageSheet
 
@@ -227,34 +344,75 @@ final class TrackersViewController: UIViewController {
         }
     }
 
-    private func addNewTracker(_ tracker: Tracker, category selectedCategory: TrackerCategory) {
-        dataProvider.addTracker(tracker, category: selectedCategory)
-    }
-
     @objc private func dateChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
+
+        if selectedFilter == .today && !Calendar.current.isDate(Date(), inSameDayAs: currentDate) {
+            selectedFilter = .all
+        } else if selectedFilter == .all
+            && Calendar.current.isDate(Date(), inSameDayAs: currentDate)
+        {
+            selectedFilter = .today
+        }
+
         filterTrackers()
     }
-}
 
-// MARK: - DataProviderDelegate
+    private func presentDeleteAlert(for tracker: Tracker) {
+        let alert = UIAlertController(
+            title: nil,
+            message: Constants.Texts.deleteConfirmationMessage,
+            preferredStyle: .actionSheet
+        )
 
-extension TrackersViewController: DataProviderDelegate {
-    func dataDidChange() {
-        DispatchQueue.main.async { [weak self] in
-            self?.loadTrackers()
+        let deleteAction = UIAlertAction(title: Constants.Texts.delete, style: .destructive) {
+            [weak self] _ in
+            self?.dataProvider.deleteTracker(tracker)
+        }
+
+        let cancelAction = UIAlertAction(
+            title: Constants.Texts.cancel, style: .cancel, handler: nil)
+
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+
+        present(alert, animated: true, completion: nil)
+    }
+
+    @objc private func filtersButtonTapped() {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "filter")
+        let filtersVC = FiltersViewController(selectedFilter: selectedFilter)
+        filtersVC.onFilterSelected = { [weak self] filter in
+            self?.selectedFilter = filter
+            self?.filterTrackers()
+
+            guard let self = self else { return }
+            let calendar = Calendar.current
+            let weekday = calendar.component(.weekday, from: self.currentDate)
+            let currentWeekday = weekday == 1 ? Weekday.sunday : Weekday(rawValue: weekday - 1)!
+            let hasTrackersForSelectedDay = self.categories.flatMap { $0.trackers }.contains {
+                tracker in
+                tracker.schedule?.contains(currentWeekday) ?? false
+            }
+            self.filtersButton.isHidden = !hasTrackersForSelectedDay
+        }
+
+        filtersVC.modalPresentationStyle = .pageSheet
+
+        dismiss(animated: true) { [weak self] in
+            self?.present(filtersVC, animated: true)
         }
     }
-}
 
-// MARK: - UIConfigurable
+    // MARK: - UIConfigurable
 
-extension TrackersViewController: UIConfigurable {
     func setupUI() {
         view.backgroundColor = Constants.Colors.background
 
-        for item in [addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView]
-        {
+        for item in [
+            addButton, datePicker, titleLabel, searchBar, collectionView, placeholderView,
+            filtersButton,
+        ] {
             view.addSubview(item)
         }
 
@@ -291,7 +449,7 @@ extension TrackersViewController: UIConfigurable {
                 equalTo: searchBar.bottomAnchor, constant: Constants.Sizes.collectionViewTopPadding),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -308,7 +466,31 @@ extension TrackersViewController: UIConfigurable {
                 constant: Constants.Sizes.placeholderLabelTopPadding),
             placeholderLabel.centerXAnchor.constraint(equalTo: placeholderView.centerXAnchor),
             placeholderLabel.bottomAnchor.constraint(equalTo: placeholderView.bottomAnchor),
+
+            filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filtersButton.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor, constant: -Constants.Sizes.filtersButtonBottomPadding),
         ])
+    }
+
+    private func setupCollectionViewInsets() {
+        collectionView.contentInset = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: Constants.Sizes.filtersButtonHeight + Constants.Sizes.filtersButtonBottomPadding
+                + Constants.Sizes.collectionViewTopPadding,
+            right: 0
+        )
+    }
+}
+
+// MARK: - DataProviderDelegate
+
+extension TrackersViewController: DataProviderDelegate {
+    func dataDidChange() {
+        DispatchQueue.main.async { [weak self] in
+            self?.loadTrackers()
+        }
     }
 }
 
@@ -356,6 +538,23 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
             self?.toggleTrackerCompletion(tracker)
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.reloadItems(at: [indexPath])
+            }
+        }
+
+        cell.onMenuAction = { [weak self] action in
+            guard let self = self else { return }
+
+            switch action {
+            case .pin:
+                self.dataProvider.pinTracker(tracker)
+                self.filterTrackers()
+            case .unpin:
+                self.dataProvider.unpinTracker(tracker)
+                self.filterTrackers()
+            case .edit:
+                self.editTracker(tracker, category: self.visibleCategories[indexPath.section])
+            case .delete:
+                self.presentDeleteAlert(for: tracker)
             }
         }
 
@@ -417,6 +616,29 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     ) -> CGFloat {
         return Constants.Sizes.lineSpacing
     }
+
+    private func editTracker(_ tracker: Tracker, category: TrackerCategory) {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "edit")
+        let editTrackerVC = TrackerFormViewController(
+            editedTracker: (tracker, completedDays(for: tracker)), category: category)
+        editTrackerVC.onDone = { [weak self] newTracker, selectedCategory in
+            self?.dataProvider.updateTracker(newTracker, category: selectedCategory)
+        }
+        editTrackerVC.modalPresentationStyle = .pageSheet
+
+        dismiss(animated: true) { [weak self] in
+            self?.present(editTrackerVC, animated: true)
+        }
+    }
+
+    private func deleteTracker(_ tracker: Tracker, at indexPath: IndexPath) {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "delete")
+        dataProvider.deleteTracker(tracker)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        MetricaService.shared.reportEvent(event: "click", screen: "Main", item: "track")
+    }
 }
 
 // MARK: - Tracker Completion Handling
@@ -436,7 +658,8 @@ extension TrackersViewController {
     private func toggleTrackerCompletion(_ tracker: Tracker) {
         if currentDate > Date() {
             let alert = UIAlertController(
-                title: Constants.Texts.error, message: Constants.Texts.cannotMarkFutureDate,
+                title: Constants.Texts.error,
+                message: Constants.Texts.cannotMarkFutureDate,
                 preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Constants.Texts.ok, style: .default, handler: nil))
             present(alert, animated: true, completion: nil)

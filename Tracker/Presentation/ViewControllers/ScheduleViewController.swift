@@ -32,11 +32,11 @@ private enum Constants {
     }
 
     enum Colors {
-        static let background = UIColor.white
-        static let buttonBackground = UIColor.black
-        static let buttonText = UIColor.white
+        static let background = UIColor.ypWhite
+        static let buttonBackground = UIColor.ypBlack
+        static let buttonText = UIColor.ypWhite
         static let cellBackground = UIColor.ypBackground
-        static let cellText = UIColor.black
+        static let cellText = UIColor.ypBlack
         static let cellDetailText = UIColor.ypGray
     }
 

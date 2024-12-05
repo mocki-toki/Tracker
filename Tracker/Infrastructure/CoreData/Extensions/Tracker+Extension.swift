@@ -13,6 +13,7 @@ extension Tracker {
         self.name = coreData.name!
         self.emoji = coreData.emoji!
         self.colorName = coreData.colorName!
+        self.isPinned = coreData.isPinned
         self.schedule = Set(
             coreData.schedule?
                 .split(separator: ",")
@@ -25,5 +26,6 @@ extension TrackerCoreData {
         self.init(context: context)
         self.id = data.id
         self.name = data.name
+        self.isPinned = data.isPinned
     }
 }

@@ -15,7 +15,7 @@ private enum Constants {
     }
 
     enum Colors {
-        static let switchTint = UIColor.systemBlue
+        static let switchTint = UIColor.ypBlue
     }
 
     enum Fonts {

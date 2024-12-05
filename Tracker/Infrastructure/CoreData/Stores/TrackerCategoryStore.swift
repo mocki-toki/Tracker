@@ -59,6 +59,11 @@ final class TrackerCategoryStore: NSObject {
         return category
     }
 
+    func updateCategory(_ category: TrackerCategoryCoreData, newName: String) {
+        category.name = newName
+        saveContext()
+    }
+
     func getCategory(byName name: String) -> TrackerCategoryCoreData? {
         let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> =
             TrackerCategoryCoreData.fetchRequest()
@@ -69,6 +74,20 @@ final class TrackerCategoryStore: NSObject {
             return categories.first
         } catch {
             print("Error fetching category by name: \(error)")
+            return nil
+        }
+    }
+
+    func getCategory(byId id: UUID) -> TrackerCategoryCoreData? {
+        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> =
+            TrackerCategoryCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        fetchRequest.fetchLimit = 1
+        do {
+            let categories = try context.fetch(fetchRequest)
+            return categories.first
+        } catch {
+            print("Error fetching category by id: \(error)")
             return nil
         }
     }
