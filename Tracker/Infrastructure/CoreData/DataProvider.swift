@@ -64,8 +64,9 @@ final class DataProvider {
     }
 
     func deleteCategory(_ category: TrackerCategory) {
-        trackerCategoryStore.deleteCategory(
-            TrackerCategoryCoreData(data: category, context: context))
+        guard let categoryCoreData = trackerCategoryStore.getCategory(byName: category.name)
+        else { return }
+        trackerCategoryStore.deleteCategory(categoryCoreData)
     }
 
     func updateTracker(_ tracker: Tracker, category: TrackerCategory) {
@@ -73,6 +74,12 @@ final class DataProvider {
             trackerCategoryStore.getCategory(byName: category.name)
             ?? trackerCategoryStore.addCategory(name: category.name)
         trackerStore.updateTracker(tracker, category: categoryCoreData)
+    }
+
+    func updateCategory(_ category: TrackerCategory, newName: String) {
+        guard let categoryCoreData = trackerCategoryStore.getCategory(byId: category.id)
+        else { return }
+        trackerCategoryStore.updateCategory(categoryCoreData, newName: newName)
     }
 
     func pinTracker(_ tracker: Tracker) {

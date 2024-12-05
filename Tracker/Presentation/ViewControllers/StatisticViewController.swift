@@ -104,10 +104,14 @@ final class StatisticViewController: UIViewController {
 
     private enum Constants {
         enum Texts {
-            static let title = "Статистика"
-            static let noDataText = "Анализировать пока нечего"
-            static let trackersCount = "Всего трекеров"
-            static let trackersCompleted = "Трекеров завершено"
+            static let title = NSLocalizedString(
+                "Statistic_Title", comment: "Title for the StatisticViewController")
+            static let noDataText = NSLocalizedString(
+                "Statistic_NoDataText", comment: "Text displayed when there is no data to analyze")
+            static let trackersCount = NSLocalizedString(
+                "Statistic_TrackersCount", comment: "Label for total trackers count")
+            static let trackersCompleted = NSLocalizedString(
+                "Statistic_TrackersCompleted", comment: "Label for completed trackers count")
         }
 
         enum Fonts {

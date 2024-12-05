@@ -226,20 +226,25 @@ extension TrackersViewCell: UIContextMenuInteractionDelegate {
         configurationForMenuAtLocation location: CGPoint
     ) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let unpinAction = UIAction(title: "Открепить") { [weak self] _ in
+            let unpinAction = UIAction(title: NSLocalizedString("Unpin", comment: "Unpin tracker"))
+            { [weak self] _ in
                 self?.onMenuAction?(.unpin)
             }
 
-            let pinAction = UIAction(title: "Закрепить") { [weak self] _ in
+            let pinAction = UIAction(title: NSLocalizedString("Pin", comment: "Pin tracker")) {
+                [weak self] _ in
                 self?.onMenuAction?(.pin)
             }
 
-            let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+            let editAction = UIAction(title: NSLocalizedString("Edit", comment: "Edit tracker")) {
+                [weak self] _ in
                 self?.onMenuAction?(.edit)
             }
 
-            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) {
-                [weak self] _ in
+            let deleteAction = UIAction(
+                title: NSLocalizedString("Delete", comment: "Delete tracker"),
+                attributes: .destructive
+            ) { [weak self] _ in
                 self?.onMenuAction?(.delete)
             }
 

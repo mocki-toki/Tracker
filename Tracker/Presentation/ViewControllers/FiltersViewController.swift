@@ -10,17 +10,17 @@ import UIKit
 // MARK: - FilterOption Enum
 
 enum FilterOption: String, CaseIterable {
-    case all = "Все трекеры"
-    case today = "Трекеры на сегодня"
-    case completed = "Завершенные"
-    case incomplete = "Незавершенные"
+    case all = "filter_all"
+    case today = "filter_today"
+    case completed = "filter_completed"
+    case incomplete = "filter_incomplete"
 }
 
 // MARK: - Constants
 
 private enum Constants {
     enum Texts {
-        static let title = "Фильтры"
+        static let title = NSLocalizedString("filters_title", comment: "Title for Filters screen")
     }
 
     enum Sizes {
@@ -136,7 +136,9 @@ extension FiltersViewController: UITableViewDelegate, UITableViewDataSource {
 
         let filterOption = FilterOption.allCases[indexPath.row]
         let isSelected = filterOption == selectedFilter
-        cell.configure(with: filterOption.rawValue, isSelected: isSelected)
+        cell.configure(
+            with: NSLocalizedString(filterOption.rawValue, comment: "Filter option"),
+            isSelected: isSelected)
         return cell
     }
 

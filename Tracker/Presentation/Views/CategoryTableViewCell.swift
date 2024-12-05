@@ -24,6 +24,15 @@ private enum Constants {
 final class CategoryTableViewCell: UITableViewCell {
     static let identifier = "CategoryTableViewCell"
 
+    // MARK: - Menu Actions
+
+    enum MenuAction {
+        case edit
+        case delete
+    }
+
+    var onMenuAction: ((_ action: MenuAction) -> Void)?
+
     // MARK: - UI Components
 
     private let nameLabel: UILabel = {
@@ -46,6 +55,7 @@ final class CategoryTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
         setupConstraints()
+        setupContextMenu()
     }
 
     required init?(coder: NSCoder) {
@@ -78,5 +88,36 @@ final class CategoryTableViewCell: UITableViewCell {
     func configure(with category: TrackerCategory, isSelected: Bool) {
         nameLabel.text = category.name
         selectionCheckbox.isHidden = !isSelected
+    }
+
+    // MARK: - Context Menu
+
+    private func setupContextMenu() {
+        let interaction = UIContextMenuInteraction(delegate: self)
+        contentView.addInteraction(interaction)
+    }
+}
+
+extension CategoryTableViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let editAction = UIAction(
+                title: NSLocalizedString("Редактировать", comment: "Edit menu action")
+            ) { [weak self] _ in
+                self?.onMenuAction?(.edit)
+            }
+
+            let deleteAction = UIAction(
+                title: NSLocalizedString("Удалить", comment: "Delete menu action"),
+                attributes: .destructive
+            ) { [weak self] _ in
+                self?.onMenuAction?(.delete)
+            }
+
+            return UIMenu(title: "", children: [editAction, deleteAction])
+        }
     }
 }

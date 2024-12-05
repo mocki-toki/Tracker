@@ -22,7 +22,16 @@ final class TrackersViewController: UIViewController {
             static let cannotMarkFutureDate = NSLocalizedString(
                 "CannotMarkFutureDate",
                 comment: "Error message when trying to mark a tracker for a future date")
-            static let ok = "OK"
+            static let ok = NSLocalizedString("OK", comment: "OK button title")
+            static let deleteConfirmationMessage = NSLocalizedString(
+                "DeleteConfirmationMessage",
+                comment: "Message asking for tracker deletion confirmation")
+            static let delete = NSLocalizedString("Delete", comment: "Delete action title")
+            static let cancel = NSLocalizedString("Cancel", comment: "Cancel action title")
+            static let filters = NSLocalizedString("Filters", comment: "Filters button title")
+            static let nothingFound = NSLocalizedString(
+                "NothingFound",
+                comment: "Message shown when no trackers are found")
         }
 
         enum Fonts {
@@ -167,7 +176,7 @@ final class TrackersViewController: UIViewController {
 
     private lazy var filtersButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Фильтры", for: .normal)
+        button.setTitle(Constants.Texts.filters, for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = Constants.Sizes.cornerRadius
         button.contentEdgeInsets = Constants.Sizes.filtersButtonInsets
@@ -230,7 +239,8 @@ final class TrackersViewController: UIViewController {
         var filteredCategories: [TrackerCategory] = []
         if !pinnedTrackers.isEmpty {
             let pinnedCategory = TrackerCategory(
-                id: UUID(), name: "Закрепленные", trackers: pinnedTrackers)
+                id: UUID(), name: NSLocalizedString("Pinned", comment: "Pinned category name"),
+                trackers: pinnedTrackers)
             filteredCategories.append(pinnedCategory)
         }
 
@@ -261,7 +271,7 @@ final class TrackersViewController: UIViewController {
         case .today:
             currentDate = Date()
 
-            if !Calendar.current.isDate(Date(), inSameDayAs: datePicker.date) {
+            if !Calendar.current.isDate(currentDate, inSameDayAs: datePicker.date) {
                 datePicker.date = currentDate
                 DispatchQueue.main.async {
                     self.filterTrackers()
@@ -298,7 +308,7 @@ final class TrackersViewController: UIViewController {
     private func updatePlaceholderVisibility() {
         if visibleCategories.isEmpty {
             if selectedFilter == .completed || selectedFilter == .incomplete {
-                placeholderLabel.text = "Ничего не найдено"
+                placeholderLabel.text = Constants.Texts.nothingFound
                 placeholderImageView.image = UIImage.ypEmptyResultsPlaceholder
             } else {
                 placeholderLabel.text = Constants.Texts.whatToTrack
@@ -351,15 +361,17 @@ final class TrackersViewController: UIViewController {
     private func presentDeleteAlert(for tracker: Tracker) {
         let alert = UIAlertController(
             title: nil,
-            message: "Уверены, что хотите удалить трекер?",
+            message: Constants.Texts.deleteConfirmationMessage,
             preferredStyle: .actionSheet
         )
 
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let deleteAction = UIAlertAction(title: Constants.Texts.delete, style: .destructive) {
+            [weak self] _ in
             self?.dataProvider.deleteTracker(tracker)
         }
 
-        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(
+            title: Constants.Texts.cancel, style: .cancel, handler: nil)
 
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
@@ -646,7 +658,8 @@ extension TrackersViewController {
     private func toggleTrackerCompletion(_ tracker: Tracker) {
         if currentDate > Date() {
             let alert = UIAlertController(
-                title: Constants.Texts.error, message: Constants.Texts.cannotMarkFutureDate,
+                title: Constants.Texts.error,
+                message: Constants.Texts.cannotMarkFutureDate,
                 preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Constants.Texts.ok, style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
