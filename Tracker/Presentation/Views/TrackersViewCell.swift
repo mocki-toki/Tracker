@@ -27,11 +27,11 @@ final class TrackersViewCell: UICollectionViewCell {
         }
 
         enum Colors {
-            static let emojiBackground = UIColor.white.withAlphaComponent(0.3)
-            static let nameText = UIColor.white
-            static let daysCountText = UIColor.black
-            static let plusButtonTint = UIColor.white
-            static let plusButtonBorder = UIColor.white
+            static let emojiBackground = UIColor.ypWhite.withAlphaComponent(0.3)
+            static let nameText = UIColor.ypWhite
+            static let daysCountText = UIColor.ypBlack
+            static let plusButtonTint = UIColor.ypWhite
+            static let plusButtonBorder = UIColor.ypWhite
         }
 
         enum Paddings {
@@ -134,20 +134,20 @@ final class TrackersViewCell: UICollectionViewCell {
         daysCountLabel.text = "\(pluralizeDays(completedDays))"
         isPinned = tracker.isPinned
 
-        let color = UIColor(named: tracker.colorName) ?? UIColor.systemGray
+        let color = UIColor(named: tracker.colorName) ?? UIColor.ypGray
         cardView.backgroundColor = color
 
         if isCompleted {
             plusButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             plusButton.backgroundColor = color.withAlphaComponent(0.3)
-            plusButton.tintColor = .white
+            plusButton.tintColor = .ypWhite
             plusButton.layer.borderWidth = 0
         } else {
             plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
             plusButton.backgroundColor = color
-            plusButton.tintColor = .white
+            plusButton.tintColor = .ypWhite
             plusButton.layer.borderWidth = 1
-            plusButton.layer.borderColor = UIColor.white.cgColor
+            plusButton.layer.borderColor = UIColor.ypWhite.cgColor
         }
     }
 

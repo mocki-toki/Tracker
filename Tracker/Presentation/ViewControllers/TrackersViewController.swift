@@ -31,7 +31,7 @@ final class TrackersViewController: UIViewController {
         }
 
         enum Colors {
-            static let background = UIColor.white
+            static let background = UIColor.ypWhite
             static let tint = UIColor.ypBlack
             static let placeholderText = UIColor.ypBlack
             static let filtersButtonBackground = UIColor.ypBlue
@@ -168,7 +168,7 @@ final class TrackersViewController: UIViewController {
     private lazy var filtersButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Фильтры", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = Constants.Sizes.cornerRadius
         button.contentEdgeInsets = Constants.Sizes.filtersButtonInsets
         button.backgroundColor = Constants.Colors.filtersButtonBackground

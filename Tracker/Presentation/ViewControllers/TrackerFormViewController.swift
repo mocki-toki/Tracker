@@ -52,9 +52,9 @@ final class TrackerFormViewController: UIViewController {
             static let background = UIColor.ypWhite
             static let textFieldBackground = UIColor.ypBackground
             static let cellBackground = UIColor.ypBackground
-            static let cancelButtonBorder = UIColor.red
+            static let cancelButtonBorder = UIColor.ypRed
             static let doneButtonBackground = UIColor.ypBlack
-            static let doneButtonText = UIColor.white
+            static let doneButtonText = UIColor.ypWhite
             static let detailTextColor = UIColor.ypGray
             static let headerTextColor = UIColor.ypBlack
         }

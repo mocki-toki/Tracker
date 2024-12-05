@@ -23,9 +23,9 @@ final class TrackerTypeSelectionViewController: UIViewController {
         }
 
         enum Colors {
-            static let background = UIColor.white
-            static let buttonBackground = UIColor.black
-            static let buttonText = UIColor.white
+            static let background = UIColor.ypWhite
+            static let buttonBackground = UIColor.ypBlack
+            static let buttonText = UIColor.ypWhite
         }
 
         enum Sizes {

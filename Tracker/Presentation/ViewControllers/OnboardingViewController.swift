@@ -15,10 +15,10 @@ private enum Constants {
     }
 
     enum Colors {
-        static let buttonBackground = UIColor.black
-        static let buttonText = UIColor.white
-        static let pageIndicator = UIColor.lightGray
-        static let pageIndicatorSelected = UIColor.black
+        static let buttonBackground = UIColor.ypBlack
+        static let buttonText = UIColor.ypWhite
+        static let pageIndicator = UIColor.ypLightGray
+        static let pageIndicatorSelected = UIColor.ypBlack
     }
 }
 

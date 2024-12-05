@@ -11,8 +11,8 @@ import UIKit
 
 private enum Constants {
     enum Colors {
-        static let cellText = UIColor.black
-        static let checkmarkTint = UIColor.systemBlue
+        static let cellText = UIColor.ypBlack
+        static let checkmarkTint = UIColor.ypBlue
     }
 
     enum Fonts {

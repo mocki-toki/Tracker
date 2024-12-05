@@ -13,7 +13,7 @@ private enum Constants {
     }
 
     enum Colors {
-        static let checkboxTint = UIColor.systemBlue
+        static let checkboxTint = UIColor.ypBlue
     }
 
     enum Fonts {

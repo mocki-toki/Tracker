@@ -33,7 +33,7 @@ private enum Constants {
     }
 
     enum Colors {
-        static let background = UIColor.white
+        static let background = UIColor.ypWhite
     }
 
     enum Fonts {

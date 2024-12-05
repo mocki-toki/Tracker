@@ -27,8 +27,8 @@ final class MainViewController: UIViewController {
 
         enum Colors {
             static let tabBarTint = UIColor.ypBlue
-            static let background = UIColor.systemBackground
-            static let statisticsBackground = UIColor.white
+            static let background = UIColor.ypWhite
+            static let statisticsBackground = UIColor.ypWhite
         }
     }
 
