@@ -28,13 +28,12 @@ final class CategoryViewModel {
         provider.addCategory(name: name)
     }
 
-    func deleteCategory(at index: Int) {
-        let category = categories[index]
-        if let category = provider.getAllTrackersWithCategories().first(where: {
-            $0.id == category.id
-        }) {
-            provider.deleteCategory(category)
-        }
+    func updateCategory(category: TrackerCategory, newName: String) {
+        provider.updateCategory(category, newName: newName)
+    }
+
+    func deleteCategory(category: TrackerCategory) {
+        provider.deleteCategory(category)
     }
 }
 

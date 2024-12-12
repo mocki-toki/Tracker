@@ -27,11 +27,11 @@ final class TrackersViewCell: UICollectionViewCell {
         }
 
         enum Colors {
-            static let emojiBackground = UIColor.white.withAlphaComponent(0.3)
-            static let nameText = UIColor.white
-            static let daysCountText = UIColor.black
-            static let plusButtonTint = UIColor.white
-            static let plusButtonBorder = UIColor.white
+            static let emojiBackground = UIColor.ypWhite.withAlphaComponent(0.3)
+            static let nameText = UIColor.ypWhite
+            static let daysCountText = UIColor.ypBlack
+            static let plusButtonTint = UIColor.ypWhite
+            static let plusButtonBorder = UIColor.ypWhite
         }
 
         enum Paddings {
@@ -49,6 +49,15 @@ final class TrackersViewCell: UICollectionViewCell {
     static let reuseIdentifier = Constants.reuseIdentifier
 
     var onPlusButtonTap: (() -> Void)?
+    var onMenuAction: ((_ action: MenuAction) -> Void)?
+    var isPinned: Bool = false
+
+    enum MenuAction {
+        case unpin
+        case pin
+        case edit
+        case delete
+    }
 
     // MARK: - UI Components
 
@@ -57,6 +66,7 @@ final class TrackersViewCell: UICollectionViewCell {
         view.layer.cornerRadius = Constants.Sizes.cornerRadius
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = true
         return view
     }()
 
@@ -108,6 +118,7 @@ final class TrackersViewCell: UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
         setupConstraints()
+        setupContextMenu()
     }
 
     @available(*, unavailable)
@@ -121,21 +132,22 @@ final class TrackersViewCell: UICollectionViewCell {
         emojiLabel.text = tracker.emoji
         nameLabel.text = tracker.name
         daysCountLabel.text = "\(pluralizeDays(completedDays))"
+        isPinned = tracker.isPinned
 
-        let color = UIColor(named: tracker.colorName) ?? UIColor.systemGray
+        let color = UIColor(named: tracker.colorName) ?? UIColor.ypGray
         cardView.backgroundColor = color
 
         if isCompleted {
             plusButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             plusButton.backgroundColor = color.withAlphaComponent(0.3)
-            plusButton.tintColor = .white
+            plusButton.tintColor = .ypWhite
             plusButton.layer.borderWidth = 0
         } else {
             plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
             plusButton.backgroundColor = color
-            plusButton.tintColor = .white
+            plusButton.tintColor = .ypWhite
             plusButton.layer.borderWidth = 1
-            plusButton.layer.borderColor = UIColor.white.cgColor
+            plusButton.layer.borderColor = UIColor.ypWhite.cgColor
         }
     }
 
@@ -143,6 +155,13 @@ final class TrackersViewCell: UICollectionViewCell {
 
     @objc private func plusButtonTapped() {
         onPlusButtonTap?()
+    }
+
+    // MARK: - Context Menu
+
+    private func setupContextMenu() {
+        let interaction = UIContextMenuInteraction(delegate: self)
+        cardView.addInteraction(interaction)
     }
 
     // MARK: - Helpers
@@ -196,5 +215,41 @@ extension TrackersViewCell: UIConfigurable {
             plusButton.widthAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize),
             plusButton.heightAnchor.constraint(equalToConstant: Constants.Sizes.plusButtonSize),
         ])
+    }
+}
+
+// MARK: - UIContextMenuInteractionDelegate
+
+extension TrackersViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let unpinAction = UIAction(title: NSLocalizedString("Unpin", comment: "Unpin tracker"))
+            { [weak self] _ in
+                self?.onMenuAction?(.unpin)
+            }
+
+            let pinAction = UIAction(title: NSLocalizedString("Pin", comment: "Pin tracker")) {
+                [weak self] _ in
+                self?.onMenuAction?(.pin)
+            }
+
+            let editAction = UIAction(title: NSLocalizedString("Edit", comment: "Edit tracker")) {
+                [weak self] _ in
+                self?.onMenuAction?(.edit)
+            }
+
+            let deleteAction = UIAction(
+                title: NSLocalizedString("Delete", comment: "Delete tracker"),
+                attributes: .destructive
+            ) { [weak self] _ in
+                self?.onMenuAction?(.delete)
+            }
+
+            let pinOrUnpinAction = self.isPinned ? unpinAction : pinAction
+            return UIMenu(children: [pinOrUnpinAction, editAction, deleteAction])
+        }
     }
 }

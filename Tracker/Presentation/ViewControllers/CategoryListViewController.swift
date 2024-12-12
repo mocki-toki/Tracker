@@ -37,13 +37,13 @@ private enum Constants {
     }
 
     enum Colors {
-        static let background = UIColor.white
-        static let buttonBackground = UIColor.black
-        static let buttonText = UIColor.white
+        static let background = UIColor.ypWhite
+        static let buttonBackground = UIColor.ypBlack
+        static let buttonText = UIColor.ypWhite
         static let cellBackground = UIColor.ypBackground
-        static let cellText = UIColor.black
+        static let cellText = UIColor.ypBlack
         static let cellDetailText = UIColor.ypGray
-        static let switchTint = UIColor.systemBlue
+        static let switchTint = UIColor.ypBlue
         static let placeholderText = UIColor.ypBlack
     }
 
@@ -71,7 +71,7 @@ final class CategoryListViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private lazy var placeholderView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -165,9 +165,43 @@ final class CategoryListViewController: UIViewController {
         categoryVC.modalPresentationStyle = .pageSheet
         present(categoryVC, animated: true, completion: nil)
     }
-    
+
     private func updatePlaceholderVisibility() {
         placeholderView.isHidden = !viewModel.categories.isEmpty
+    }
+
+    // MARK: - Editing and Deleting Categories
+
+    private func editCategory(_ category: TrackerCategory) {
+        let editCategoryVC = CategoryFormViewController(editedCategory: category)
+        editCategoryVC.onTappedEdit = { [weak self] updatedName in
+            self?.viewModel.updateCategory(category: category, newName: updatedName)
+        }
+        editCategoryVC.modalPresentationStyle = .pageSheet
+        present(editCategoryVC, animated: true, completion: nil)
+    }
+
+    private func deleteCategory(_ category: TrackerCategory) {
+        let alert = UIAlertController(
+            title: nil,
+            message: NSLocalizedString(
+                "DeleteCategoryMessage", comment: "Сообщение для алерта удаления категории"),
+            preferredStyle: .actionSheet)
+
+        let deleteAction = UIAlertAction(
+            title: NSLocalizedString("Delete", comment: "Кнопка удаления"), style: .destructive
+        ) { [weak self] _ in
+            self?.viewModel.deleteCategory(category: category)
+        }
+
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("Cancel", comment: "Кнопка отмены"), style: .cancel,
+            handler: nil)
+
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -175,9 +209,9 @@ extension CategoryListViewController: UIConfigurable {
     // MARK: - UI Setup
 
     func setupUI() {
-        view.backgroundColor = .white
-        
-        [titleLabel, tableView, addButton, placeholderView].forEach() { view.addSubview($0) }
+        view.backgroundColor = .ypWhite
+
+        [titleLabel, tableView, addButton, placeholderView].forEach { view.addSubview($0) }
         [placeholderImageView, placeholderLabel].forEach { placeholderView.addSubview($0) }
     }
 
@@ -197,7 +231,7 @@ extension CategoryListViewController: UIConfigurable {
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             addButton.heightAnchor.constraint(equalToConstant: 60),
-            
+
             placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
@@ -227,10 +261,14 @@ extension CategoryListViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell =
-            tableView.dequeueReusableCell(
+
+        guard
+            let cell = tableView.dequeueReusableCell(
                 withIdentifier: CategoryTableViewCell.identifier, for: indexPath)
-            as! CategoryTableViewCell
+                as? CategoryTableViewCell
+        else {
+            return UITableViewCell()
+        }
 
         cell.backgroundColor = Constants.Colors.cellBackground
         cell.textLabel?.font = Constants.Fonts.cellFont
@@ -239,6 +277,15 @@ extension CategoryListViewController: UITableViewDelegate, UITableViewDataSource
 
         let category = viewModel.categories[indexPath.row]
         cell.configure(with: category, isSelected: category == selectedCategory)
+
+        cell.onMenuAction = { [weak self] action in
+            switch action {
+            case .edit:
+                self?.editCategory(category)
+            case .delete:
+                self?.deleteCategory(category)
+            }
+        }
 
         if indexPath.row == viewModel.categories.count - 1 {
             cell.separatorInset = UIEdgeInsets(

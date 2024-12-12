@@ -15,10 +15,10 @@ private enum Constants {
     }
 
     enum Colors {
-        static let buttonBackground = UIColor.black
-        static let buttonText = UIColor.white
-        static let pageIndicator = UIColor.lightGray
-        static let pageIndicatorSelected = UIColor.black
+        static let buttonBackground = UIColor.ypBlack
+        static let buttonText = UIColor.ypWhite
+        static let pageIndicator = UIColor.ypLightGray
+        static let pageIndicatorSelected = UIColor.ypBlack
     }
 }
 
@@ -40,17 +40,23 @@ final class OnboardingViewController: UIPageViewController {
     private let pages: [UIViewController] = [
         OnboardingPageViewController(
             imageName: "Onboarding Background 1",
-            titleText: "Отслеживайте только то, что хотите"
+            titleText: NSLocalizedString(
+                "Onboarding.TrackOnlyWhatYouWant", comment: "Title for first onboarding screen")
         ),
         OnboardingPageViewController(
             imageName: "Onboarding Background 2",
-            titleText: "Даже если это не литры воды и йога"
+            titleText: NSLocalizedString(
+                "Onboarding.EvenIfNotLitersWaterYoga", comment: "Title for second onboarding screen"
+            )
         ),
     ]
 
     private let skipButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(
+            NSLocalizedString(
+                "Onboarding.SkipButton.Title", comment: "Title for skip button on onboarding"),
+            for: .normal)
         button.setTitleColor(Constants.Colors.buttonText, for: .normal)
         button.backgroundColor = Constants.Colors.buttonBackground
         button.layer.cornerRadius = Constants.Sizes.cornerRadius

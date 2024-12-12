@@ -37,13 +37,13 @@ private enum Constants {
     }
 
     enum Colors {
-        static let background = UIColor.white
-        static let buttonBackground = UIColor.black
-        static let buttonText = UIColor.white
+        static let background = UIColor.ypWhite
+        static let buttonBackground = UIColor.ypBlack
+        static let buttonText = UIColor.ypWhite
         static let cellBackground = UIColor.ypBackground
-        static let cellText = UIColor.black
+        static let cellText = UIColor.ypBlack
         static let cellDetailText = UIColor.ypGray
-        static let switchTint = UIColor.systemBlue
+        static let switchTint = UIColor.ypBlue
         static let textFieldBackground = UIColor.ypBackground
     }
 
@@ -165,7 +165,7 @@ extension CategoryFormViewController: UIConfigurable {
     // MARK: - UI Setup
 
     func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhite
 
         [titleLabel, nameTextField, doneButton].forEach { view.addSubview($0) }
     }
